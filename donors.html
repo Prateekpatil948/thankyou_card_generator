@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Donors — 1008 Parshwanath Digambar Jain Mandir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-950:#231a15;
+    --stone-100:#efe8dd;
+    --stone-50:#f7f3ea;
+    --maroon:#5A0F16;
+    --gold:#C9A227;
+    --gold-light:#E9C863;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, #2c211a 0%, transparent 45%),
+      radial-gradient(circle at 90% 100%, #2c211a 0%, transparent 45%),
+      var(--stone-950);
+    color: var(--stone-100);
+    min-height:100vh;
+    padding: 28px 16px 60px;
+  }
+  .wrap{ max-width: 1180px; margin: 0 auto; }
+  header.app-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom: 22px;
+  }
+  header.app-head .mark{
+    width:44px;height:44px;border-radius:10px;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+    box-shadow: 0 4px 14px rgba(201,162,39,0.35);
+  }
+  header.app-head h1{ font-size: 20px; font-weight:600; letter-spacing:.2px; color: var(--stone-50); margin:0; }
+  header.app-head p{ font-size:12.5px; color:#c9bfae; margin-top:2px; }
+  .back-link{
+    display:inline-block;
+    margin-bottom:18px;
+    font-size:13px;
+    color:#c9bfae;
+    text-decoration:none;
+  }
+  .back-link:hover{ color: var(--gold-light); }
+
+  .panel{
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .path-hint{
+    font-size:12.5px;
+    color:#a89c86;
+    margin: 0 0 14px;
+    line-height:1.5;
+  }
+  .path-hint code{
+    background: rgba(255,255,255,0.06);
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: var(--gold-light);
+  }
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .btn-primary, .btn-secondary{
+    padding:11px 16px;
+    border-radius:11px;
+    border:none;
+    font-weight:600;
+    font-size:13.5px;
+    cursor:pointer;
+    font-family:'Poppins',sans-serif;
+  }
+  .btn-primary{
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color:#2b2007;
+    font-weight:700;
+  }
+  .btn-secondary{
+    border:1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.03);
+    color:#e7dfd1;
+  }
+  .btn-primary:disabled, .btn-secondary:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+  }
+  input[type="file"]{ display:none; }
+
+  .summary{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+    margin-top:16px;
+    font-size:12.5px;
+    color:#c9bfae;
+  }
+  .summary b{ color: var(--stone-50); font-size:15px; display:block; }
+
+  .status-note{
+    font-size:12.5px;
+    color:#a89c86;
+    margin-top:12px;
+  }
+  .status-note.error{ color:#e08b8b; }
+
+  .table-wrap{
+    overflow-x:auto;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  table{
+    width:100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 640px;
+  }
+  thead th{
+    text-align:left;
+    background: rgba(255,255,255,0.05);
+    color: var(--gold-light);
+    font-weight:600;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    padding: 12px 14px;
+    white-space:nowrap;
+    position: sticky;
+    top:0;
+  }
+  tbody td{
+    padding: 11px 14px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: var(--stone-100);
+    vertical-align: middle;
+  }
+  tbody tr:hover{ background: rgba(255,255,255,0.03); }
+  .row-download{
+    padding: 7px 12px;
+    border-radius: 8px;
+    border:1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.03);
+    color:#e7dfd1;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:'Poppins',sans-serif;
+    white-space:nowrap;
+  }
+  .row-download:hover{ border-color: var(--gold); color: var(--gold-light); }
+
+  .empty-state{
+    padding: 34px 18px;
+    text-align:center;
+    color:#a89c86;
+    font-size:13.5px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="index.html">← Back to card generator</a>
+
+  <header class="app-head">
+    <div class="mark">🙏</div>
+    <div>
+      <h1>All Donors</h1>
+      <p>1008 Parshwanath Digambar Jain Mandir · Vaddebail — donor register</p>
+    </div>
+  </header>
+
+  <div class="panel">
+    <p class="path-hint">
+      Expected file: <code>/home/prateek/workspace/Personal/donors.csv</code><br>
+      For security, browsers can't read an arbitrary file path automatically — pick the file below
+      (or place a copy named <code>donors.csv</code> next to this page and it will load on its own).
+    </p>
+    <div class="toolbar">
+      <button class="btn-primary" id="pickFileBtn" type="button">📂 Load donors.csv</button>
+      <button class="btn-secondary" id="downloadAllBtn" type="button" disabled>⬇ Download All (CSV)</button>
+      <button class="btn-secondary" id="refreshBtn" type="button">↻ Try auto-load again</button>
+      <input type="file" id="fileInput" accept=".csv,text/csv">
+    </div>
+    <div class="summary" id="summary" style="display:none;"></div>
+    <div class="status-note" id="statusNote">Looking for a <code>donors.csv</code> file in the same folder…</div>
+  </div>
+
+  <div class="panel" id="tablePanel" style="display:none;">
+    <div class="table-wrap">
+      <table>
+        <thead><tr id="tableHead"></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel" id="emptyPanel">
+    <div class="empty-state">No donor data loaded yet.</div>
+  </div>
+
+</div>
+
+<script>
+const CSV_PATH_HINT = '/home/prateek/workspace/Personal/donors.csv';
+
+let headers = [];
+let rows = [];
+
+function csvEscape(val) {
+  const s = String(val ?? '');
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function parseCSVLine(line) {
+  const out = [];
+  let cur = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (line[i + 1] === '"') { cur += '"'; i++; }
+        else inQuotes = false;
+      } else cur += ch;
+    } else {
+      if (ch === '"') inQuotes = true;
+      else if (ch === ',') { out.push(cur); cur = ''; }
+      else cur += ch;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+  if (!lines.length) return { headers: [], rows: [] };
+  const hdrs = parseCSVLine(lines[0]).map(h => h.trim());
+  const data = lines.slice(1).map(line => parseCSVLine(line));
+  return { headers: hdrs, rows: data };
+}
+
+function buildCSV(hdrs, dataRows) {
+  return [hdrs, ...dataRows].map(row => row.map(csvEscape).join(',')).join('\r\n');
+}
+
+function triggerDownload(filename, csvText) {
+  const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function safeFileName(s) {
+  return String(s || 'donor').trim().replace(/[^a-z0-9\-_ ]/gi, '').replace(/\s+/g, '-') || 'donor';
+}
+
+function findColumnIndex(namesToTry) {
+  for (const name of namesToTry) {
+    const idx = headers.findIndex(h => h.toLowerCase() === name.toLowerCase());
+    if (idx !== -1) return idx;
+  }
+  return -1;
+}
+
+function renderTable() {
+  const tableHead = document.getElementById('tableHead');
+  const tableBody = document.getElementById('tableBody');
+  const tablePanel = document.getElementById('tablePanel');
+  const emptyPanel = document.getElementById('emptyPanel');
+  const downloadAllBtn = document.getElementById('downloadAllBtn');
+  const summary = document.getElementById('summary');
+
+  if (!rows.length) {
+    tablePanel.style.display = 'none';
+    emptyPanel.style.display = 'block';
+    downloadAllBtn.disabled = true;
+    summary.style.display = 'none';
+    return;
+  }
+
+  tablePanel.style.display = 'block';
+  emptyPanel.style.display = 'none';
+  downloadAllBtn.disabled = false;
+
+  tableHead.innerHTML = headers.map(h => `<th>${h}</th>`).join('') + '<th>Action</th>';
+
+  tableBody.innerHTML = '';
+  rows.forEach((row) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = headers.map((_, i) => `<td>${row[i] ?? ''}</td>`).join('');
+    const actionTd = document.createElement('td');
+    const btn = document.createElement('button');
+    btn.className = 'row-download';
+    btn.textContent = '⬇ Download';
+    const nameIdx = findColumnIndex(['Donor Name', 'Name']);
+    const donorLabel = nameIdx !== -1 ? row[nameIdx] : 'donor';
+    btn.addEventListener('click', () => {
+      triggerDownload(`${safeFileName(donorLabel)}.csv`, buildCSV(headers, [row]));
+    });
+    actionTd.appendChild(btn);
+    tr.appendChild(actionTd);
+    tableBody.appendChild(tr);
+  });
+
+  // Summary line
+  const amountIdx = findColumnIndex(['Amount (Rs)', 'Amount', 'Donation Amount']);
+  let summaryHTML = `<div><b>${rows.length}</b>Total donors</div>`;
+  if (amountIdx !== -1) {
+    const total = rows.reduce((sum, r) => {
+      const n = Number(String(r[amountIdx] || '').replace(/[^0-9.\-]/g, ''));
+      return sum + (isFinite(n) ? n : 0);
+    }, 0);
+    summaryHTML += `<div><b>₹${total.toLocaleString('en-IN')}</b>Total contributions</div>`;
+  }
+  summary.innerHTML = summaryHTML;
+  summary.style.display = 'flex';
+}
+
+function loadFromText(text, sourceLabel) {
+  const parsed = parseCSV(text);
+  headers = parsed.headers;
+  rows = parsed.rows;
+  renderTable();
+  const statusNote = document.getElementById('statusNote');
+  statusNote.classList.remove('error');
+  statusNote.innerHTML = `Loaded <b>${rows.length}</b> donor${rows.length === 1 ? '' : 's'} from ${sourceLabel}.`;
+}
+
+function showError(msg) {
+  const statusNote = document.getElementById('statusNote');
+  statusNote.classList.add('error');
+  statusNote.textContent = msg;
+}
+
+async function tryAutoLoad() {
+  const statusNote = document.getElementById('statusNote');
+  statusNote.classList.remove('error');
+  statusNote.textContent = 'Looking for a donors.csv file in the same folder…';
+  try {
+    const res = await fetch('donors.csv', { cache: 'no-store' });
+    if (!res.ok) throw new Error('not found');
+    const text = await res.text();
+    loadFromText(text, '<code>donors.csv</code>');
+  } catch (e) {
+    showError(`Couldn't auto-load donors.csv (expected at ${CSV_PATH_HINT}). Use "Load donors.csv" to pick the file manually.`);
+  }
+}
+
+document.getElementById('pickFileBtn').addEventListener('click', () => {
+  document.getElementById('fileInput').click();
+});
+document.getElementById('fileInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  loadFromText(text, file.name);
+  e.target.value = '';
+});
+document.getElementById('refreshBtn').addEventListener('click', tryAutoLoad);
+document.getElementById('downloadAllBtn').addEventListener('click', () => {
+  triggerDownload('donors.csv', buildCSV(headers, rows));
+});
+
+tryAutoLoad();
+</script>
+</body>
+</html>

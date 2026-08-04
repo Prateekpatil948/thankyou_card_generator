@@ -127,36 +127,6 @@
   }
   textarea{ resize:vertical; min-height:64px; line-height:1.5;}
 
-  .photo-drop{
-    border: 1.5px dashed rgba(255,255,255,0.22);
-    border-radius: 12px;
-    padding: 16px;
-    text-align:center;
-    cursor:pointer;
-    font-size:13px;
-    color:#c9bfae;
-    position:relative;
-    transition:.15s;
-  }
-  .photo-drop:hover{ border-color: var(--gold); color:var(--gold-light); }
-  .photo-drop input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
-  .photo-preview{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-top:10px;
-  }
-  .photo-preview img{
-    width:52px;height:52px;border-radius:50%;
-    object-fit:cover;
-    border:2px solid var(--gold);
-  }
-  .photo-preview button{
-    background:none;border:none;color:#e59a9a;font-size:12.5px;cursor:pointer;
-    text-decoration:underline;
-    font-family:'Poppins',sans-serif;
-  }
-
   .btn-primary{
     width:100%;
     padding:13px;
@@ -204,6 +174,14 @@
 
   .history{
     margin-top: 28px;
+  }
+  .history-actions{
+    margin-bottom: 12px;
+  }
+  .history-actions .btn-secondary{
+    width: 100%;
+    font-size: 13px;
+    padding: 10px 14px;
   }
   .history h2{
     font-size:13px;
@@ -298,29 +276,18 @@
       </div>
 
       <div class="field">
-        <label>Donor photo (optional)</label>
-        <div class="photo-drop" id="dropZone">
-          <span id="dropLabel">Tap to upload a photo</span>
-          <input type="file" id="photoInput" accept="image/*">
-        </div>
-        <div class="photo-preview" id="photoPreview" style="display:none;">
-          <img id="photoImg" src="">
-          <button id="removePhoto">Remove photo</button>
-        </div>
-      </div>
-
-      <div class="field">
         <label for="donorAmount">Donation amount (optional)</label>
         <input type="text" id="donorAmount" inputmode="numeric" placeholder="e.g. 5000">
       </div>
 
       <button class="btn-primary" id="downloadBtn">⬇ Download thank-you card</button>
-      <button class="btn-secondary" id="saveBtn">Save to donor log</button>
+      <button class="btn-secondary" id="allDonorsBtn" type="button">📋 All Donors</button>
 
       <div class="history">
         <h2>Recent thank-you cards</h2>
+        
         <div class="history-grid" id="historyGrid">
-          <div class="history-empty">No cards saved yet — generate one and tap "Save to donor log".</div>
+          <div class="history-empty">No entries yet — tap "Download" to add one.</div>
         </div>
       </div>
     </div>
@@ -488,7 +455,6 @@ let state = {
   nameRaw: '',
   name: '',
   purpose: COPY.en.defaultPurpose,
-  photo: null, // dataURL
   amount: '',
 };
 
@@ -540,8 +506,6 @@ let bgTempleImg = new Image();
 let bgLoaded = false;
 bgTempleImg.onload = () => { bgLoaded = true; draw(); };
 bgTempleImg.src = TEMPLE_PHOTO;
-
-let donorImg = null;
 
 let logoImg = new Image();
 let logoLoaded = false;
@@ -625,7 +589,7 @@ function draw() {
   wrapText(ctx, c.subtitle, W - 240).forEach(line => { ctx.fillText(line, W/2, y); y += 28; });
   y += 34;
 
-  // donor photo circle
+  // decorative emblem circle
   const rad = 92;
   const cx = W/2, cy = y + rad;
   ctx.save();
@@ -637,18 +601,11 @@ function draw() {
   ctx.strokeStyle = '#A9791F';
   ctx.stroke();
   ctx.clip();
-  if (donorImg) {
-    const iw = donorImg.width, ih = donorImg.height;
-    const s = Math.max((rad*2)/iw, (rad*2)/ih);
-    const dw = iw*s, dh = ih*s;
-    ctx.drawImage(donorImg, cx - dw/2, cy - dh/2, dw, dh);
-  } else {
-    ctx.font = '84px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('🙏', cx, cy + 6);
-    ctx.textBaseline = 'alphabetic';
-  }
+  ctx.font = '84px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🙏', cx, cy + 6);
+  ctx.textBaseline = 'alphabetic';
   ctx.restore();
   y = cy + rad + 56;
 
@@ -783,164 +740,327 @@ purposeEl.addEventListener('input', (e) => {
   draw();
 });
 
-const photoInput = document.getElementById('photoInput');
-const dropLabel = document.getElementById('dropLabel');
-const photoPreview = document.getElementById('photoPreview');
-const photoImg = document.getElementById('photoImg');
+document.getElementById('downloadBtn').addEventListener('click', async () => {
+  if (state.name.trim()) {
+    await logDonorEntry(); // write to donors.csv first, while the click's user-gesture is freshest
+  }
 
-photoInput.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    state.photo = ev.target.result;
-    photoImg.src = state.photo;
-    photoPreview.style.display = 'flex';
-    dropLabel.textContent = 'Photo selected — tap to change';
-    donorImg = new Image();
-    donorImg.onload = draw;
-    donorImg.src = state.photo;
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('removePhoto').addEventListener('click', () => {
-  state.photo = null;
-  donorImg = null;
-  photoInput.value = '';
-  photoPreview.style.display = 'none';
-  dropLabel.textContent = 'Tap to upload a photo';
-  draw();
-});
-
-document.getElementById('downloadBtn').addEventListener('click', () => {
   const link = document.createElement('a');
   const safeName = (state.name.trim() || 'donor').replace(/[^a-zA-Z0-9]+/g, '_');
   link.download = `thankyou_${safeName}.png`;
   link.href = canvas.toDataURL('image/png');
   link.click();
+
+  document.getElementById('statusNote').textContent = state.name.trim()
+    ? 'Card downloaded and donor log updated.'
+    : 'Card downloaded.';
 });
 
-// ---- History / storage ----
-const STORAGE_KEY = 'donor-log';
+// ---- Donor log — writes straight into donors.csv, no repeat downloads ----
 const historyGrid = document.getElementById('historyGrid');
+let donorLog = [];              // in-memory list for this session
+let csvFileHandle = null;       // FileSystemFileHandle, once granted
+let handleReady = false;        // true once we've tried to restore/seed from an existing file
+let fsAccessSupported = !!window.showSaveFilePicker;
 
-async function loadHistory() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) {
-    return [];
-  }
+// --- tiny IndexedDB helper so the file handle survives a page reload ---
+// (Chrome/Edge can persist a FileSystemFileHandle this way, so the save
+// picker only needs to be shown once, the first time this is used.)
+function idbGet(key) {
+  return new Promise((resolve) => {
+    const req = indexedDB.open('donor-card-app', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('handles');
+    req.onsuccess = () => {
+      const db = req.result;
+      const tx = db.transaction('handles', 'readonly');
+      const getReq = tx.objectStore('handles').get(key);
+      getReq.onsuccess = () => resolve(getReq.result || null);
+      getReq.onerror = () => resolve(null);
+    };
+    req.onerror = () => resolve(null);
+  });
 }
-
-async function saveHistory(list) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-  } catch (e) {
-    console.error('storage save failed', e);
-  }
-}
-
-function shrinkPhoto(dataUrl, cb) {
-  if (!dataUrl) { cb(null); return; }
-  const img = new Image();
-  img.onload = () => {
-    const s = 140 / Math.max(img.width, img.height);
-    const w = Math.round(img.width * s), h = Math.round(img.height * s);
-    const c = document.createElement('canvas');
-    c.width = w; c.height = h;
-    c.getContext('2d').drawImage(img, 0, 0, w, h);
-    cb(c.toDataURL('image/jpeg', 0.6));
-  };
-  img.src = dataUrl;
-}
-
-async function renderHistory() {
-  const list = await loadHistory();
-  if (!list.length) {
-    historyGrid.innerHTML = '<div class="history-empty">No cards saved yet — generate one and tap "Save to donor log".</div>';
-    return;
-  }
-  historyGrid.innerHTML = '';
-  list.slice().reverse().forEach((rec) => {
-    const div = document.createElement('div');
-    div.className = 'history-card';
-    div.innerHTML = `
-      <img class="thumb" src="${rec.thumb || ''}" onerror="this.style.display='none'">
-      <div class="hname">${rec.name}</div>
-      <div class="hmeta">${rec.langLabel} · ${rec.date}${rec.amount ? ' · ₹' + Number(rec.amount).toLocaleString('en-IN') : ''}</div>
-      <button class="hdel">Delete</button>
-    `;
-    div.querySelector('.thumb').addEventListener('click', () => {
-      state.lang = rec.lang;
-      state.nameRaw = rec.nameRaw || rec.name;
-      state.name = transliterateForLang(state.nameRaw, rec.lang);
-      state.purpose = rec.purpose;
-      state.photo = rec.photo || null;
-      state.amount = rec.amount || '';
-      document.getElementById('donorName').value = state.nameRaw;
-      document.getElementById('donorAmount').value = state.amount;
-      purposeEl.value = rec.purpose;
-      purposeEl.dataset.userEdited = "1";
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === rec.lang));
-      if (rec.photo) {
-        donorImg = new Image();
-        donorImg.onload = draw;
-        donorImg.src = rec.photo;
-        photoImg.src = rec.photo;
-        photoPreview.style.display = 'flex';
-        dropLabel.textContent = 'Photo selected — tap to change';
-      } else {
-        donorImg = null;
-        photoPreview.style.display = 'none';
-        dropLabel.textContent = 'Tap to upload a photo';
-      }
-      draw();
-      window.scrollTo({top:0, behavior:'smooth'});
-    });
-    div.querySelector('.hdel').addEventListener('click', async (ev) => {
-      ev.stopPropagation();
-      const cur = await loadHistory();
-      const filtered = cur.filter(r => r.id !== rec.id);
-      await saveHistory(filtered);
-      renderHistory();
-    });
-    historyGrid.appendChild(div);
+function idbSet(key, value) {
+  return new Promise((resolve) => {
+    const req = indexedDB.open('donor-card-app', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('handles');
+    req.onsuccess = () => {
+      const db = req.result;
+      const tx = db.transaction('handles', 'readwrite');
+      tx.objectStore('handles').put(value, key);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+    };
+    req.onerror = () => resolve(false);
   });
 }
 
-document.getElementById('saveBtn').addEventListener('click', async () => {
-  if (!state.name.trim()) {
-    document.getElementById('statusNote').textContent = 'Enter a donor name before saving.';
-    return;
+function csvEscape(val) {
+  const s = String(val ?? '');
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function buildCSV(list) {
+  const header = ['Donor Name', 'Amount (Rs)', 'Purpose', 'Date of Donation'];
+  const rows = list.map(r => [r.name, r.amount || '', r.purpose || '', r.date]);
+  return [header, ...rows].map(row => row.map(csvEscape).join(',')).join('\r\n');
+}
+
+function parseCSVLine(line) {
+  const out = [];
+  let cur = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (line[i + 1] === '"') { cur += '"'; i++; }
+        else inQuotes = false;
+      } else cur += ch;
+    } else {
+      if (ch === '"') inQuotes = true;
+      else if (ch === ',') { out.push(cur); cur = ''; }
+      else cur += ch;
+    }
   }
-  const langLabels = { en: 'English', kn: 'ಕನ್ನಡ', mr: 'मराठी' };
-  const rec = {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
-    name: state.name.trim(),
-    nameRaw: state.nameRaw.trim(),
-    lang: state.lang,
-    langLabel: langLabels[state.lang],
-    purpose: state.purpose,
-    photo: state.photo,
-    amount: state.amount,
-    date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }),
-  };
-  shrinkPhoto(canvas.toDataURL('image/jpeg', 0.7), async (thumb) => {
-    rec.thumb = thumb;
-    const list = await loadHistory();
-    list.push(rec);
-    await saveHistory(list);
+  out.push(cur);
+  return out;
+}
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+  if (lines.length < 2) return [];
+  return lines.slice(1).map(line => {
+    const cols = parseCSVLine(line);
+    return {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      name: cols[0] || '',
+      amount: cols[1] || '',
+      purpose: cols[2] || '',
+      date: cols[3] || '',
+    };
+  });
+}
+
+// function downloadCSVFallback(csvText) {
+//   const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
+//   const url = URL.createObjectURL(blob);
+//   const link = document.createElement('a');
+//   link.href = url;
+//   link.download = 'donors.csv';
+//   link.click();
+//   URL.revokeObjectURL(url);
+// }
+
+// Gets (and remembers) permission to write straight to donors.csv.
+// The OS "choose a file" dialog only appears once — the very first time —
+// after that the handle is reused silently, both within this tab and
+// (via IndexedDB) across future visits, as long as permission still holds.
+async function ensureFileHandle() {
+    if (!window.showOpenFilePicker) {
+        alert("Your browser does not support automatic CSV updating. Please use Google Chrome or Microsoft Edge.");
+        return null;
+    }
+
+    if (csvFileHandle) return csvFileHandle;
+
+    const savedHandle = await idbGet("donorsCsvHandle");
+
+    if (savedHandle) {
+        const permission = await savedHandle.requestPermission({
+            mode: "readwrite"
+        });
+
+        if (permission === "granted") {
+            csvFileHandle = savedHandle;
+            return csvFileHandle;
+        }
+    }
+
+    try {
+        const [handle] = await window.showOpenFilePicker({
+            multiple: false,
+            types: [{
+                description: "CSV File",
+                accept: {
+                    "text/csv": [".csv"]
+                }
+            }]
+        });
+
+        await handle.requestPermission({
+            mode: "readwrite"
+        });
+
+        csvFileHandle = handle;
+
+        await idbSet("donorsCsvHandle", handle);
+
+        return handle;
+
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
+}
+
+// The first time a handle is obtained, pull in whatever donors.csv
+// already contains so we append to it instead of overwriting it.
+// async function seedFromExistingFile(handle) {
+//   if (handleReady) return;
+//   handleReady = true;
+//   if (donorLog.length) return; // already has entries this session
+//   try {
+//     const file = await handle.getFile();
+//     const text = await file.text();
+//     const existing = parseCSV(text);
+//     if (existing.length) {
+//       donorLog = existing;
+//       renderHistory();
+//     }
+//   } catch (e) {
+//     // empty/new file — nothing to seed
+//   }
+// }
+
+async function writeLogFile() {
+  //
+}
+
+async function logDonorEntry() {
+
+    const handle = await ensureFileHandle();
+
+    if (!handle) return;
+
+    // Read latest CSV every time
+    let file = await handle.getFile();
+    let text = await file.text();
+
+    donorLog = parseCSV(text);
+
+    donorLog.push({
+        id: crypto.randomUUID(),
+        name: state.name.trim(),
+        amount: state.amount || "",
+        purpose: state.purpose || "",
+        date: new Date().toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        })
+    });
+
     renderHistory();
-    document.getElementById('statusNote').textContent = 'Saved to donor log.';
-  });
+
+    const csv = buildCSV(donorLog);
+
+    const writable = await handle.createWritable();
+
+    await writable.write(csv);
+
+    await writable.close();
+
+    document.getElementById("statusNote").textContent =
+        "Donor added successfully.";
+}
+
+function renderHistory() {
+
+    if (!donorLog.length) {
+        historyGrid.innerHTML =
+            '<div class="history-empty">No entries yet.</div>';
+        return;
+    }
+
+    historyGrid.innerHTML = "";
+
+    // Only latest 5 donors
+    const recentDonors = donorLog.slice(-5).reverse();
+
+    recentDonors.forEach((rec) => {
+
+        const div = document.createElement("div");
+
+        div.className = "history-card";
+
+        div.innerHTML = `
+            <div class="hname">${rec.name}</div>
+
+            <div class="hmeta">
+                ${rec.date}
+                ${rec.amount ? "<br>₹ " + Number(rec.amount).toLocaleString("en-IN") : ""}
+            </div>
+
+            <button class="hdel">Delete</button>
+        `;
+
+        // Load donor back into the form
+        div.addEventListener("click", (e) => {
+
+            if (e.target.closest(".hdel")) return;
+
+            state.nameRaw = rec.name;
+            state.name = transliterateForLang(state.nameRaw, state.lang);
+            state.amount = rec.amount || "";
+            state.purpose = rec.purpose || "";
+
+            donorName.value = state.nameRaw;
+            donorAmount.value = state.amount;
+            purpose.value = state.purpose;
+
+            draw();
+        });
+
+        div.querySelector(".hdel").addEventListener("click", async (e) => {
+
+            e.stopPropagation();
+
+            donorLog = donorLog.filter(r => r.id !== rec.id);
+
+            renderHistory();
+
+            const csv = buildCSV(donorLog);
+
+            const handle = await ensureFileHandle();
+
+            if (handle) {
+                const writable = await handle.createWritable();
+                await writable.write(csv);
+                await writable.close();
+            }
+
+        });
+
+        historyGrid.appendChild(div);
+
+    });
+
+}
+
+
+document.getElementById('allDonorsBtn').addEventListener('click', () => {
+  window.open('donors.html', '_blank');
 });
 
 // initial font-ready draw
-document.fonts.ready.then(() => {
-  draw();
-  renderHistory();
+document.fonts.ready.then(async () => {
+
+    draw();
+
+    const handle = await ensureFileHandle();
+
+    if (handle) {
+
+        const file = await handle.getFile();
+
+        const text = await file.text();
+
+        donorLog = parseCSV(text);
+
+        renderHistory();
+
+    }
+
 });
 setTimeout(draw, 600); // fallback in case fonts.ready is slow
 </script>
