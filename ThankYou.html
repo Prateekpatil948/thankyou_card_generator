@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donor Thank-You Card Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Tamma+2:wght@500;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Cinzel:wght@600;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-950:#231a15;
+    --stone-800:#3a2c22;
+    --stone-100:#efe8dd;
+    --stone-50:#f7f3ea;
+    --maroon:#5A0F16;
+    --maroon-deep:#3f0a0f;
+    --gold:#C9A227;
+    --gold-light:#E9C863;
+    --ivory:#FBF3E3;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, #2c211a 0%, transparent 45%),
+      radial-gradient(circle at 90% 100%, #2c211a 0%, transparent 45%),
+      var(--stone-950);
+    color: var(--stone-100);
+    min-height:100vh;
+    padding: 28px 16px 60px;
+  }
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  header.app-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom: 26px;
+  }
+  header.app-head .mark{
+    width:44px;height:44px;border-radius:10px;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+    box-shadow: 0 4px 14px rgba(201,162,39,0.35);
+  }
+  header.app-head h1{
+    font-size: 20px;
+    font-weight:600;
+    letter-spacing:.2px;
+    color: var(--stone-50);
+  }
+  header.app-head p{
+    font-size:12.5px;
+    color:#c9bfae;
+    margin-top:2px;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns: 380px 1fr;
+    gap: 22px;
+    align-items:start;
+  }
+  @media (max-width: 900px){
+    .layout{ grid-template-columns: 1fr; }
+  }
+
+  .panel{
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .field{ margin-bottom:16px; }
+  .field label{
+    display:block;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#c9bfae;
+    margin-bottom:7px;
+    font-weight:600;
+  }
+  .lang-row{
+    display:flex;
+    gap:8px;
+  }
+  .lang-btn{
+    flex:1;
+    padding:9px 6px;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.03);
+    color:#e7dfd1;
+    font-size:13px;
+    cursor:pointer;
+    transition: all .15s ease;
+    font-family:'Poppins',sans-serif;
+  }
+  .lang-btn.active{
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #2b2007;
+    border-color: transparent;
+    font-weight:600;
+  }
+
+  input[type=text], textarea{
+    width:100%;
+    padding:11px 12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.04);
+    color: var(--stone-50);
+    font-size:14.5px;
+    font-family:'Poppins',sans-serif;
+    outline:none;
+  }
+  input[type=text]:focus, textarea:focus{
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.06);
+  }
+  textarea{ resize:vertical; min-height:64px; line-height:1.5;}
+
+  .photo-drop{
+    border: 1.5px dashed rgba(255,255,255,0.22);
+    border-radius: 12px;
+    padding: 16px;
+    text-align:center;
+    cursor:pointer;
+    font-size:13px;
+    color:#c9bfae;
+    position:relative;
+    transition:.15s;
+  }
+  .photo-drop:hover{ border-color: var(--gold); color:var(--gold-light); }
+  .photo-drop input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .photo-preview{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:10px;
+  }
+  .photo-preview img{
+    width:52px;height:52px;border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--gold);
+  }
+  .photo-preview button{
+    background:none;border:none;color:#e59a9a;font-size:12.5px;cursor:pointer;
+    text-decoration:underline;
+    font-family:'Poppins',sans-serif;
+  }
+
+  .btn-primary{
+    width:100%;
+    padding:13px;
+    border-radius:11px;
+    border:none;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color:#2b2007;
+    font-weight:700;
+    font-size:14.5px;
+    cursor:pointer;
+    letter-spacing:.02em;
+    font-family:'Poppins',sans-serif;
+  }
+  .btn-primary:active{ transform: translateY(1px); }
+  .btn-secondary{
+    width:100%;
+    margin-top:10px;
+    padding:12px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.03);
+    color:#e7dfd1;
+    font-weight:600;
+    font-size:13.5px;
+    cursor:pointer;
+    font-family:'Poppins',sans-serif;
+  }
+
+  .canvas-panel{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+  }
+  #cardCanvas{
+    width:100%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.55);
+  }
+  .status-note{
+    font-size:12px;
+    color:#a89c86;
+  }
+
+  .history{
+    margin-top: 28px;
+  }
+  .history h2{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:#c9bfae;
+    margin-bottom:12px;
+    font-weight:600;
+  }
+  .history-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap:12px;
+  }
+  .history-card{
+    background: rgba(255,255,255,0.035);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 10px;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .history-card:hover{ border-color: var(--gold); }
+  .history-card .thumb{
+    width:100%;
+    aspect-ratio: 4/5;
+    border-radius:8px;
+    object-fit:cover;
+    margin-bottom:8px;
+    background:#2a2018;
+  }
+  .history-card .hname{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--stone-50);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .history-card .hmeta{
+    font-size:10.5px;
+    color:#a89c86;
+    margin-top:2px;
+  }
+  .history-empty{
+    font-size:12.5px;
+    color:#7d7263;
+    padding: 18px 0;
+  }
+  .hdel{
+    display:block;
+    margin-top:6px;
+    font-size:10.5px;
+    color:#c98a8a;
+    background:none;border:none;cursor:pointer;
+    text-decoration:underline;
+    font-family:'Poppins',sans-serif;
+    padding:0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="app-head">
+    <div class="mark">🙏</div>
+    <div>
+      <h1>Donor Thank-You Card Generator</h1>
+      <p>1008 Parshwanath Digambar Jain Mandir · Vaddebail — internal committee tool</p>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="field">
+        <label>Card language</label>
+        <div class="lang-row">
+          <button class="lang-btn active" data-lang="en">English</button>
+          <button class="lang-btn" data-lang="kn">ಕನ್ನಡ</button>
+          <button class="lang-btn" data-lang="mr">मराठी</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="donorName">Donor name</label>
+        <input type="text" id="donorName" placeholder="e.g. Suresh Kumar Jain">
+      </div>
+
+      <div class="field">
+        <label for="purpose">Contribution towards (editable)</label>
+        <textarea id="purpose"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Donor photo (optional)</label>
+        <div class="photo-drop" id="dropZone">
+          <span id="dropLabel">Tap to upload a photo</span>
+          <input type="file" id="photoInput" accept="image/*">
+        </div>
+        <div class="photo-preview" id="photoPreview" style="display:none;">
+          <img id="photoImg" src="">
+          <button id="removePhoto">Remove photo</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="donorAmount">Donation amount (optional)</label>
+        <input type="text" id="donorAmount" inputmode="numeric" placeholder="e.g. 5000">
+      </div>
+
+      <button class="btn-primary" id="downloadBtn">⬇ Download thank-you card</button>
+      <button class="btn-secondary" id="saveBtn">Save to donor log</button>
+
+      <div class="history">
+        <h2>Recent thank-you cards</h2>
+        <div class="history-grid" id="historyGrid">
+          <div class="history-empty">No cards saved yet — generate one and tap "Save to donor log".</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel canvas-panel">
+      <canvas id="cardCanvas" width="1300" height="1794"></canvas>
+      <div class="status-note" id="statusNote">Preview updates as you type.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TEMPLE_PHOTO = "temple-bg.jpg";
+const LOGO_PHOTO = "logo.jpg";
+
+const COPY = {
+  en: {
+    trustLine: "1008 Parshwanath\nDigambar Puratan Jain Basadi\nVaddebail",
+    invocation: "|| Shree Veetharagay Namah ||",
+    title: "THANK YOU",
+    subtitle: "Heartfelt gratitude for your generous donation",
+    defaultPurpose: "the temple renovation (Jirnodhar)",
+    messageTemplate: (name, purpose) =>
+      `${name}, your generous contribution towards ${purpose} will always be remembered with gratitude by our entire community. May you be blessed with good health, peace and prosperity.`,
+    footerAddr: "Vaddebail, Tq. Khanapur, Dist. Belagavi, Karnataka",
+    dharma: "|| Ahimsa Paramo Dharmah ||",
+    namePrefix: "",
+    dateLabel: "Dated",
+    amountLabel: "Donation",
+  },
+  kn: {
+    trustLine: "1008 ಪಾರ್ಶ್ವನಾಥ\nದಿಗಂಬರ ಪುರಾತನ ಜೈನ ಬಸದಿ\nವಡ್ಡೆಬೈಲ",
+    invocation: "|| ಶ್ರೀ ವೀತರಾಗಾಯ ನಮಃ ||",
+    title: "ಧನ್ಯವಾದಗಳು",
+    subtitle: "ನಿಮ್ಮ ಉದಾರ ದೇಣಿಗೆಗಾಗಿ ಹೃತ್ಪೂರ್ವಕ ಕೃತಜ್ಞತೆಗಳು",
+    defaultPurpose: "ಮಂದಿರ ಜೀರ್ಣೋದ್ಧಾರ ಕಾರ್ಯ",
+    messageTemplate: (name, purpose) =>
+      `${name} ಅವರೇ, ${purpose}ಕ್ಕೆ ನೀವು ನೀಡಿದ ಉದಾರ ದೇಣಿಗೆಯನ್ನು ನಮ್ಮ ಇಡೀ ಸಮುದಾಯ ಕೃತಜ್ಞತೆಯಿಂದ ಸ್ಮರಿಸುತ್ತದೆ. ನಿಮಗೆ ಆರೋಗ್ಯ, ಶಾಂತಿ ಮತ್ತು ಸಮೃದ್ಧಿ ಸಿಗಲಿ.`,
+    footerAddr: "ವಡ್ಡೆಬೈಲ, ತಾ. ಖಾನಾಪುರ, ಜಿ. ಬೆಳಗಾವಿ, ಕರ್ನಾಟಕ",
+    dharma: "|| ಅಹಿಂಸಾ ಪರಮೋ ಧರ್ಮಃ ||",
+    namePrefix: "",
+    dateLabel: "ದಿನಾಂಕ",
+    amountLabel: "ದೇಣಿಗೆ",
+  },
+  mr: {
+    trustLine: "1008 पार्श्वनाथ\nदिगंबर पुरातन जैन बसदी\nवड्डेबैल",
+    invocation: "|| श्री वीतरागाय नमः ||",
+    title: "धन्यवाद",
+    subtitle: "आपल्या उदार देणगीबद्दल मनःपूर्वक कृतज्ञता",
+    defaultPurpose: "मंदिर जीर्णोद्धार कार्य",
+    messageTemplate: (name, purpose) =>
+      `${name} जी, ${purpose}साठी आपण दिलेली उदार देणगी आमचा संपूर्ण समुदाय कृतज्ञतेने स्मरणात ठेवेल. आपणास आरोग्य, शांती व समृद्धी लाभो.`,
+    footerAddr: "वड्डेबैल, ता. खानापूर, जि. बेळगाव, कर्नाटक",
+    dharma: "|| अहिंसा परमो धर्मः ||",
+    namePrefix: "",
+    dateLabel: "दिनांक",
+    amountLabel: "देणगी",
+  }
+};
+
+const FONT_HEAD = { en: "Cinzel", kn: "Baloo Tamma 2", mr: "Baloo 2" };
+const FONT_BODY = { en: "Poppins", kn: "Noto Sans Kannada", mr: "Noto Sans Devanagari" };
+
+// ---- Auto script conversion (best-effort phonetic transliteration) ----
+function detectScript(str) {
+  if (/[\u0900-\u097F]/.test(str)) return 'devanagari';
+  if (/[\u0C80-\u0CFF]/.test(str)) return 'kannada';
+  return 'latin';
+}
+
+const TRANSLIT_TOKENS = [
+  { p:'ksh', c:true, dev:'क्ष', kan:'ಕ್ಷ' },
+  { p:'chh', c:true, dev:'छ', kan:'ಛ' },
+  { p:'shh', c:true, dev:'ष', kan:'ಷ' },
+  { p:'sh',  c:true, dev:'श', kan:'ಶ' },
+  { p:'ch',  c:true, dev:'च', kan:'ಚ' },
+  { p:'th',  c:true, dev:'थ', kan:'ಥ' },
+  { p:'dh',  c:true, dev:'ध', kan:'ಧ' },
+  { p:'bh',  c:true, dev:'भ', kan:'ಭ' },
+  { p:'ph',  c:true, dev:'फ', kan:'ಫ' },
+  { p:'kh',  c:true, dev:'ख', kan:'ಖ' },
+  { p:'gh',  c:true, dev:'घ', kan:'ಘ' },
+  { p:'ny',  c:true, dev:'ञ', kan:'ಞ' },
+  { p:'k', c:true, dev:'क', kan:'ಕ' },
+  { p:'g', c:true, dev:'ग', kan:'ಗ' },
+  { p:'j', c:true, dev:'ज', kan:'ಜ' },
+  { p:'t', c:true, dev:'त', kan:'ತ' },
+  { p:'d', c:true, dev:'द', kan:'ದ' },
+  { p:'n', c:true, dev:'न', kan:'ನ' },
+  { p:'p', c:true, dev:'प', kan:'ಪ' },
+  { p:'b', c:true, dev:'ब', kan:'ಬ' },
+  { p:'m', c:true, dev:'म', kan:'ಮ' },
+  { p:'y', c:true, dev:'य', kan:'ಯ' },
+  { p:'r', c:true, dev:'र', kan:'ರ' },
+  { p:'l', c:true, dev:'ल', kan:'ಲ' },
+  { p:'v', c:true, dev:'व', kan:'ವ' },
+  { p:'w', c:true, dev:'व', kan:'ವ' },
+  { p:'s', c:true, dev:'स', kan:'ಸ' },
+  { p:'h', c:true, dev:'ह', kan:'ಹ' },
+  { p:'f', c:true, dev:'फ', kan:'ಫ' },
+  { p:'z', c:true, dev:'ज', kan:'ಜ' },
+  { p:'au', v:true, dev:'औ', devM:'ौ', kan:'ಔ', kanM:'ೌ' },
+  { p:'ai', v:true, dev:'ऐ', devM:'ै', kan:'ಐ', kanM:'ೈ' },
+  { p:'aa', v:true, dev:'आ', devM:'ा', kan:'ಆ', kanM:'ಾ' },
+  { p:'ee', v:true, dev:'ई', devM:'ी', kan:'ಈ', kanM:'ೀ' },
+  { p:'oo', v:true, dev:'ऊ', devM:'ू', kan:'ಊ', kanM:'ೂ' },
+  { p:'ii', v:true, dev:'ई', devM:'ी', kan:'ಈ', kanM:'ೀ' },
+  { p:'uu', v:true, dev:'ऊ', devM:'ू', kan:'ಊ', kanM:'ೂ' },
+  { p:'a', v:true, dev:'अ', devM:'', kan:'ಅ', kanM:'' },
+  { p:'i', v:true, dev:'इ', devM:'ि', kan:'ಇ', kanM:'ಿ' },
+  { p:'u', v:true, dev:'उ', devM:'ु', kan:'ಉ', kanM:'ು' },
+  { p:'e', v:true, dev:'ए', devM:'े', kan:'ಏ', kanM:'ೇ' },
+  { p:'o', v:true, dev:'ओ', devM:'ो', kan:'ಓ', kanM:'ೋ' },
+].sort((a, b) => b.p.length - a.p.length);
+
+const VIRAMA = { devanagari: '्', kannada: '್' };
+
+function transliterateWord(word, script) {
+  let out = '';
+  let i = 0;
+  let pending = null;
+  const lower = word.toLowerCase();
+  while (i < lower.length) {
+    let matched = null;
+    for (const tok of TRANSLIT_TOKENS) {
+      if (lower.startsWith(tok.p, i)) { matched = tok; break; }
+    }
+    if (!matched) {
+      if (pending) { out += (script === 'devanagari' ? pending.dev : pending.kan); pending = null; }
+      out += word[i];
+      i += 1;
+      continue;
+    }
+    if (matched.c) {
+      if (pending) out += (script === 'devanagari' ? pending.dev : pending.kan) + VIRAMA[script];
+      pending = matched;
+    } else if (matched.v) {
+      if (pending) {
+        const matra = script === 'devanagari' ? matched.devM : matched.kanM;
+        out += (script === 'devanagari' ? pending.dev : pending.kan) + matra;
+        pending = null;
+      } else {
+        out += script === 'devanagari' ? matched.dev : matched.kan;
+      }
+    }
+    i += matched.p.length;
+  }
+  if (pending) out += (script === 'devanagari' ? pending.dev : pending.kan);
+  return out;
+}
+
+// Converts a raw typed name into the script matching the selected card
+// language. Best-effort phonetic conversion — stays editable so the
+// committee can fine-tune spelling if needed.
+function transliterateForLang(raw, lang) {
+  if (!raw) return raw;
+  if (lang === 'en') return raw;
+  if (detectScript(raw) !== 'latin') return raw; // already in an Indic script
+  const targetScript = lang === 'kn' ? 'kannada' : 'devanagari';
+  return raw.split(' ').map(w => w ? transliterateWord(w, targetScript) : w).join(' ');
+}
+
+let state = {
+  lang: 'en',
+  nameRaw: '',
+  name: '',
+  purpose: COPY.en.defaultPurpose,
+  photo: null, // dataURL
+  amount: '',
+};
+
+function formatINR(num) {
+  try {
+    return new Intl.NumberFormat('en-IN').format(num);
+  } catch (e) {
+    return String(num);
+  }
+}
+
+const canvas = document.getElementById('cardCanvas');
+const ctx = canvas.getContext('2d');
+// Layout is designed against this logical 1000x1180 grid; the actual
+// canvas is rendered larger (see width/height attributes above) and
+// everything is scaled up proportionally at draw time for a
+// higher-resolution card.
+const W = 1000, H = 1380;
+const RENDER_SCALE = canvas.width / W;
+
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (let w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = w;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+let bgTempleImg = new Image();
+let bgLoaded = false;
+bgTempleImg.onload = () => { bgLoaded = true; draw(); };
+bgTempleImg.src = TEMPLE_PHOTO;
+
+let donorImg = null;
+
+let logoImg = new Image();
+let logoLoaded = false;
+logoImg.onload = () => { logoLoaded = true; draw(); };
+logoImg.src = LOGO_PHOTO;
+
+function draw() {
+  const c = COPY[state.lang];
+  const headFont = FONT_HEAD[state.lang];
+  const bodyFont = FONT_BODY[state.lang];
+
+  // Reset any prior transform, clear the full (larger) physical canvas,
+  // then scale up so the 1000x1180 layout below fills it crisply.
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.scale(RENDER_SCALE, RENDER_SCALE);
+
+  // background
+  ctx.fillStyle = '#FBF3E3';
+  ctx.fillRect(0, 0, W, H);
+
+  // temple photo as full-bleed background
+  if (bgLoaded) {
+    const iw = bgTempleImg.width, ih = bgTempleImg.height;
+    const s = Math.max(W / iw, H / ih);
+    const dw = iw * s, dh = ih * s;
+    ctx.drawImage(bgTempleImg, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    // translucent ivory wash so text stays legible over the photo
+    ctx.fillStyle = 'rgba(251,243,227,0.87)';
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // outer gold border + maroon inset frame
+  ctx.strokeStyle = '#A9791F';
+  ctx.lineWidth = 5;
+  ctx.strokeRect(18, 18, W - 36, H - 36);
+  ctx.strokeStyle = '#6E1420';
+  ctx.lineWidth = 10;
+  ctx.strokeRect(40, 40, W - 80, H - 80);
+
+  // corner brackets
+  ctx.strokeStyle = '#A9791F';
+  ctx.lineWidth = 3;
+  const cl = 46, off = 26;
+  [[off,off,1,1],[W-off,off,-1,1],[off,H-off,1,-1],[W-off,H-off,-1,-1]].forEach(([x,y,dx,dy])=>{
+    ctx.beginPath();
+    ctx.moveTo(x, y + cl*dy);
+    ctx.lineTo(x, y);
+    ctx.lineTo(x + cl*dx, y);
+    ctx.stroke();
+  });
+
+  let y = 150;
+
+  // invocation
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#6E1420';
+  ctx.font = `600 22px "${bodyFont}"`;
+  ctx.fillText('🔔  ' + c.invocation + '  🔔', W/2, y);
+  y += 30;
+
+  ctx.strokeStyle = '#A9791F';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(120, y); ctx.lineTo(W-120, y); ctx.stroke();
+  y += 90;
+
+  // trust line
+  ctx.fillStyle = '#5A0F16';
+  ctx.font = `700 34px "${headFont}"`;
+  c.trustLine.split('\n').forEach(line => { ctx.fillText(line, W/2, y); y += 42; });
+  y += 24;
+
+  // THANK YOU title
+  ctx.fillStyle = '#7A1218';
+  ctx.font = `800 56px "${headFont}"`;
+  ctx.fillText('🪷 ' + c.title + ' 🪷', W/2, y);
+  y += 40;
+
+  ctx.fillStyle = '#3A2A17';
+  ctx.font = `500 22px "${bodyFont}"`;
+  wrapText(ctx, c.subtitle, W - 240).forEach(line => { ctx.fillText(line, W/2, y); y += 28; });
+  y += 34;
+
+  // donor photo circle
+  const rad = 92;
+  const cx = W/2, cy = y + rad;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, rad, 0, Math.PI*2);
+  ctx.fillStyle = '#F3D998';
+  ctx.fill();
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = '#A9791F';
+  ctx.stroke();
+  ctx.clip();
+  if (donorImg) {
+    const iw = donorImg.width, ih = donorImg.height;
+    const s = Math.max((rad*2)/iw, (rad*2)/ih);
+    const dw = iw*s, dh = ih*s;
+    ctx.drawImage(donorImg, cx - dw/2, cy - dh/2, dw, dh);
+  } else {
+    ctx.font = '84px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🙏', cx, cy + 6);
+    ctx.textBaseline = 'alphabetic';
+  }
+  ctx.restore();
+  y = cy + rad + 56;
+
+  // donor name
+  const displayName = state.name.trim() || (state.lang === 'en' ? 'Donor Name' : state.lang === 'kn' ? 'ದಾನಿಗಳ ಹೆಸರು' : 'दात्याचे नाव');
+  ctx.fillStyle = '#6E1420';
+  ctx.font = `800 46px "${headFont}"`;
+  ctx.fillText(displayName, W/2, y);
+  y += 20;
+
+  // gold divider under name
+  ctx.strokeStyle = '#C9A227';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(W/2-70, y); ctx.lineTo(W/2+70, y); ctx.stroke();
+  y += 44;
+
+  // amount badge
+  const amountNum = parseFloat(state.amount);
+  if (state.amount && !isNaN(amountNum) && amountNum > 0) {
+    const amountStr = `${c.amountLabel}: ₹ ${formatINR(amountNum)}`;
+    ctx.font = `700 30px "${bodyFont}"`;
+    const tw = ctx.measureText(amountStr).width;
+    const padX = 34, badgeH = 58;
+    const bw = tw + padX * 2, bx = W/2 - bw/2, by = y;
+    ctx.fillStyle = '#F3D998';
+    roundRect(ctx, bx, by, bw, badgeH, badgeH/2);
+    ctx.fill();
+    ctx.strokeStyle = '#A9791F';
+    ctx.lineWidth = 2;
+    roundRect(ctx, bx, by, bw, badgeH, badgeH/2);
+    ctx.stroke();
+    ctx.fillStyle = '#5A0F16';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(amountStr, W/2, by + badgeH/2 + 2);
+    ctx.textBaseline = 'alphabetic';
+    y += badgeH + 40;
+  }
+
+  // message
+  const purposeText = (state.purpose.trim() || c.defaultPurpose);
+  const msg = c.messageTemplate(displayName, purposeText);
+  ctx.fillStyle = '#2E2116';
+  ctx.font = `400 25px "${bodyFont}"`;
+  const msgLines = wrapText(ctx, msg, W - 220);
+  msgLines.forEach(line => { ctx.fillText(line, W/2, y); y += 36; });
+
+  // date
+  y += 10;
+  const today = new Date();
+  const dateStr = today.toLocaleDateString(state.lang === 'en' ? 'en-IN' : state.lang === 'kn' ? 'kn-IN' : 'mr-IN', { day:'numeric', month:'long', year:'numeric' });
+  ctx.font = `500 19px "${bodyFont}"`;
+  ctx.fillStyle = '#6E1420';
+  ctx.fillText(`${c.dateLabel}: ${dateStr}`, W/2, y);
+
+  // footer band
+  const footH = 170;
+  ctx.fillStyle = '#5A0F16';
+  ctx.fillRect(40, H - 40 - footH, W - 80, footH);
+
+  let fy = H - 40 - footH + 44;
+  ctx.fillStyle = '#FBF3E3';
+  ctx.font = `500 21px "${bodyFont}"`;
+  wrapText(ctx, c.footerAddr, W - 200).forEach(line => { ctx.fillText(line, W/2, fy); fy += 28; });
+
+  fy += 18;
+  ctx.fillStyle = '#F3D998';
+  ctx.font = `700 20px "${headFont}"`;
+  ctx.fillText(c.dharma, W/2, fy);
+
+  // circular logo image, top right corner (drawn last so it sits above the divider line)
+  {
+    const logoRad = 82;
+    const logoCx = W - 40 - 26 - logoRad + 4;
+    const logoCy = 40 + 26 + logoRad - 4;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(logoCx, logoCy, logoRad, 0, Math.PI * 2);
+    ctx.fillStyle = '#F3D998';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#A9791F';
+    ctx.stroke();
+    ctx.clip();
+    if (logoLoaded) {
+      const iw = logoImg.width, ih = logoImg.height;
+      const s = Math.max((logoRad * 2) / iw, (logoRad * 2) / ih);
+      const dw = iw * s, dh = ih * s;
+      ctx.drawImage(logoImg, logoCx - dw / 2, logoCy - dh / 2, dw, dh);
+    }
+    ctx.restore();
+    ctx.strokeStyle = '#A9791F';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(logoCx, logoCy, logoRad, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+}
+
+function setLang(lang) {
+  state.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  const purposeEl = document.getElementById('purpose');
+  if (!purposeEl.dataset.userEdited) {
+    state.purpose = COPY[lang].defaultPurpose;
+    purposeEl.value = state.purpose;
+  }
+  state.name = transliterateForLang(state.nameRaw, lang);
+  draw();
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLang(btn.dataset.lang));
+});
+
+document.getElementById('donorName').addEventListener('input', (e) => {
+  state.nameRaw = e.target.value;
+  state.name = transliterateForLang(state.nameRaw, state.lang);
+  draw();
+});
+
+document.getElementById('donorAmount').addEventListener('input', (e) => {
+  state.amount = e.target.value.replace(/[^0-9.]/g, '');
+  e.target.value = state.amount;
+  draw();
+});
+
+const purposeEl = document.getElementById('purpose');
+purposeEl.value = state.purpose;
+purposeEl.addEventListener('input', (e) => {
+  purposeEl.dataset.userEdited = "1";
+  state.purpose = e.target.value;
+  draw();
+});
+
+const photoInput = document.getElementById('photoInput');
+const dropLabel = document.getElementById('dropLabel');
+const photoPreview = document.getElementById('photoPreview');
+const photoImg = document.getElementById('photoImg');
+
+photoInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    state.photo = ev.target.result;
+    photoImg.src = state.photo;
+    photoPreview.style.display = 'flex';
+    dropLabel.textContent = 'Photo selected — tap to change';
+    donorImg = new Image();
+    donorImg.onload = draw;
+    donorImg.src = state.photo;
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('removePhoto').addEventListener('click', () => {
+  state.photo = null;
+  donorImg = null;
+  photoInput.value = '';
+  photoPreview.style.display = 'none';
+  dropLabel.textContent = 'Tap to upload a photo';
+  draw();
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const link = document.createElement('a');
+  const safeName = (state.name.trim() || 'donor').replace(/[^a-zA-Z0-9]+/g, '_');
+  link.download = `thankyou_${safeName}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+
+// ---- History / storage ----
+const STORAGE_KEY = 'donor-log';
+const historyGrid = document.getElementById('historyGrid');
+
+async function loadHistory() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+async function saveHistory(list) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.error('storage save failed', e);
+  }
+}
+
+function shrinkPhoto(dataUrl, cb) {
+  if (!dataUrl) { cb(null); return; }
+  const img = new Image();
+  img.onload = () => {
+    const s = 140 / Math.max(img.width, img.height);
+    const w = Math.round(img.width * s), h = Math.round(img.height * s);
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(img, 0, 0, w, h);
+    cb(c.toDataURL('image/jpeg', 0.6));
+  };
+  img.src = dataUrl;
+}
+
+async function renderHistory() {
+  const list = await loadHistory();
+  if (!list.length) {
+    historyGrid.innerHTML = '<div class="history-empty">No cards saved yet — generate one and tap "Save to donor log".</div>';
+    return;
+  }
+  historyGrid.innerHTML = '';
+  list.slice().reverse().forEach((rec) => {
+    const div = document.createElement('div');
+    div.className = 'history-card';
+    div.innerHTML = `
+      <img class="thumb" src="${rec.thumb || ''}" onerror="this.style.display='none'">
+      <div class="hname">${rec.name}</div>
+      <div class="hmeta">${rec.langLabel} · ${rec.date}${rec.amount ? ' · ₹' + Number(rec.amount).toLocaleString('en-IN') : ''}</div>
+      <button class="hdel">Delete</button>
+    `;
+    div.querySelector('.thumb').addEventListener('click', () => {
+      state.lang = rec.lang;
+      state.nameRaw = rec.nameRaw || rec.name;
+      state.name = transliterateForLang(state.nameRaw, rec.lang);
+      state.purpose = rec.purpose;
+      state.photo = rec.photo || null;
+      state.amount = rec.amount || '';
+      document.getElementById('donorName').value = state.nameRaw;
+      document.getElementById('donorAmount').value = state.amount;
+      purposeEl.value = rec.purpose;
+      purposeEl.dataset.userEdited = "1";
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === rec.lang));
+      if (rec.photo) {
+        donorImg = new Image();
+        donorImg.onload = draw;
+        donorImg.src = rec.photo;
+        photoImg.src = rec.photo;
+        photoPreview.style.display = 'flex';
+        dropLabel.textContent = 'Photo selected — tap to change';
+      } else {
+        donorImg = null;
+        photoPreview.style.display = 'none';
+        dropLabel.textContent = 'Tap to upload a photo';
+      }
+      draw();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+    div.querySelector('.hdel').addEventListener('click', async (ev) => {
+      ev.stopPropagation();
+      const cur = await loadHistory();
+      const filtered = cur.filter(r => r.id !== rec.id);
+      await saveHistory(filtered);
+      renderHistory();
+    });
+    historyGrid.appendChild(div);
+  });
+}
+
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  if (!state.name.trim()) {
+    document.getElementById('statusNote').textContent = 'Enter a donor name before saving.';
+    return;
+  }
+  const langLabels = { en: 'English', kn: 'ಕನ್ನಡ', mr: 'मराठी' };
+  const rec = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
+    name: state.name.trim(),
+    nameRaw: state.nameRaw.trim(),
+    lang: state.lang,
+    langLabel: langLabels[state.lang],
+    purpose: state.purpose,
+    photo: state.photo,
+    amount: state.amount,
+    date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }),
+  };
+  shrinkPhoto(canvas.toDataURL('image/jpeg', 0.7), async (thumb) => {
+    rec.thumb = thumb;
+    const list = await loadHistory();
+    list.push(rec);
+    await saveHistory(list);
+    renderHistory();
+    document.getElementById('statusNote').textContent = 'Saved to donor log.';
+  });
+});
+
+// initial font-ready draw
+document.fonts.ready.then(() => {
+  draw();
+  renderHistory();
+});
+setTimeout(draw, 600); // fallback in case fonts.ready is slow
+</script>
+</body>
+</html>
