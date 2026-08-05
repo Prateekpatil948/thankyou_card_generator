@@ -257,6 +257,9 @@
   <div class="layout">
     <div class="panel">
       <div class="field">
+        <button class="btn-secondary" id="allDonorsBtn" type="button">📋 All Donors</button>
+      </div>
+      <div class="field">
         <label>Card language</label>
         <div class="lang-row">
           <button class="lang-btn active" data-lang="en">English</button>
@@ -281,7 +284,7 @@
       </div>
 
       <button class="btn-primary" id="downloadBtn">⬇ Download thank-you card</button>
-      <button class="btn-secondary" id="allDonorsBtn" type="button">📋 All Donors</button>
+      
 
       <div class="history">
         <h2>Recent thank-you cards</h2>
@@ -306,8 +309,8 @@ const LOGO_PHOTO = "logo.jpg";
 const COPY = {
   en: {
     trustLine: "1008 Parshwanath\nDigambar Puratan Jain Basadi\nVaddebail",
-    invocation: "|| Shree Veetharagay Namah ||",
-    title: "THANK YOU",
+    invocation: "|| Jai Jinendra ||",
+    title: "WITH GRATITUDE",
     subtitle: "Heartfelt gratitude for your generous donation",
     defaultPurpose: "the temple renovation (Jirnodhar)",
     messageTemplate: (name, purpose) =>
@@ -974,8 +977,8 @@ function renderHistory() {
 
     historyGrid.innerHTML = "";
 
-    // Only latest 5 donors
-    const recentDonors = donorLog.slice(-5).reverse();
+    // Only latest 6 donors
+    const recentDonors = donorLog.slice(-6).reverse();
 
     recentDonors.forEach((rec) => {
 
