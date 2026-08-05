@@ -1091,19 +1091,21 @@ document.fonts.ready.then(async () => {
         downloadCard();
     }
 
-    const handle = await ensureFileHandle();
+    try {
+    const response = await fetch("donors.csv");
 
-    if (handle) {
-
-        const file = await handle.getFile();
-
-        const text = await file.text();
-
-        donorLog = parseCSV(text);
-
-        renderHistory();
-
+    if (!response.ok) {
+        throw new Error("Unable to load donors.csv");
     }
+
+    const text = await response.text();
+
+    donorLog = parseCSV(text);
+
+    renderHistory();
+} catch (err) {
+    console.error(err);
+}
 
 });
 setTimeout(draw, 600); // fallback in case fonts.ready is slow
