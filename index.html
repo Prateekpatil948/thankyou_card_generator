@@ -314,8 +314,10 @@ const COPY = {
     title: "WITH GRATITUDE",
     subtitle: "Heartfelt gratitude for your generous donation",
     defaultPurpose: "the temple renovation (Jirnodhar)",
-    messageTemplate: (name, purpose) =>
-      `${name}, your generous contribution towards ${purpose} will always be remembered with gratitude by our entire community. May you be blessed with good health, peace and prosperity.`,
+    messageParts: (name) => [
+      `${name}, your generous contribution towards `,
+      ` will always be remembered with gratitude by our entire community. May you be blessed with good health, peace and prosperity.`
+    ],
     footerAddr: "Vaddebail, Tq. Khanapur, Dist. Belagavi, Karnataka",
     dharma: "|| Ahimsa Paramo Dharmah ||",
     namePrefix: "",
@@ -327,9 +329,11 @@ const COPY = {
     invocation: "|| ಶ್ರೀ ವೀತರಾಗಾಯ ನಮಃ ||",
     title: "ಧನ್ಯವಾದಗಳು",
     subtitle: "ನಿಮ್ಮ ಉದಾರ ದೇಣಿಗೆಗಾಗಿ ಹೃತ್ಪೂರ್ವಕ ಕೃತಜ್ಞತೆಗಳು",
-    defaultPurpose: "ಮಂದಿರ ಜೀರ್ಣೋದ್ಧಾರ ಕಾರ್ಯ",
-    messageTemplate: (name, purpose) =>
-      `${name} ಅವರೇ, ${purpose}ಕ್ಕೆ ನೀವು ನೀಡಿದ ಉದಾರ ದೇಣಿಗೆಯನ್ನು ನಮ್ಮ ಇಡೀ ಸಮುದಾಯ ಕೃತಜ್ಞತೆಯಿಂದ ಸ್ಮರಿಸುತ್ತದೆ. ನಿಮಗೆ ಆರೋಗ್ಯ, ಶಾಂತಿ ಮತ್ತು ಸಮೃದ್ಧಿ ಸಿಗಲಿ.`,
+    defaultPurpose: "ಬಸದಿಯ ಜೀರ್ಣೋದ್ಧಾರ ಕಾರ್ಯ",
+    messageParts: (name) => [
+      `${name} ಅವರೇ, `,
+      `ಕ್ಕೆ ನೀವು ನೀಡಿದ ಉದಾರ ದೇಣಿಗೆಯನ್ನು ನಮ್ಮ ಇಡೀ ಸಮುದಾಯ ಕೃತಜ್ಞತೆಯಿಂದ ಸ್ಮರಿಸುತ್ತದೆ. ನಿಮಗೆ ಆರೋಗ್ಯ, ಶಾಂತಿ ಮತ್ತು ಸಮೃದ್ಧಿ ಸಿಗಲಿ.`
+    ],
     footerAddr: "ವಡ್ಡೆಬೈಲ, ತಾ. ಖಾನಾಪುರ, ಜಿ. ಬೆಳಗಾವಿ, ಕರ್ನಾಟಕ",
     dharma: "|| ಅಹಿಂಸಾ ಪರಮೋ ಧರ್ಮಃ ||",
     namePrefix: "",
@@ -341,14 +345,17 @@ const COPY = {
     invocation: "|| श्री वीतरागाय नमः ||",
     title: "धन्यवाद",
     subtitle: "आपल्या उदार देणगीबद्दल मनःपूर्वक कृतज्ञता",
-    defaultPurpose: "मंदिर जीर्णोद्धार कार्य",
-    messageTemplate: (name, purpose) =>
-      `${name} जी, ${purpose}साठी आपण दिलेली उदार देणगी आमचा संपूर्ण समुदाय कृतज्ञतेने स्मरणात ठेवेल. आपणास आरोग्य, शांती व समृद्धी लाभो.`,
+    defaultPurpose: "बसदि जीर्णोद्धार कार्य",
+    messageParts: (name) => [
+      `${name} जी, `,
+      `साठी आपण दिलेली उदार देणगी आमचा संपूर्ण समुदाय कृतज्ञतेने स्मरणात ठेवेल. आपणास आरोग्य, शांती व समृद्धी लाभो.`
+    ],
     footerAddr: "वड्डेबैल, ता. खानापूर, जि. बेळगाव, कर्नाटक",
     dharma: "|| अहिंसा परमो धर्मः ||",
     namePrefix: "",
     dateLabel: "दिनांक",
     amountLabel: "देणगी",
+    purposeLabel: "देणगीचा उद्देश",
   }
 };
 
@@ -494,6 +501,48 @@ function wrapText(ctx, text, maxWidth) {
   }
   if (line) lines.push(line);
   return lines;
+}
+
+function wrapStyledText(ctx, parts, maxWidth, fontFamily, fontSize) {
+  const lines = [];
+  let line = [], lineWidth = 0;
+  parts.forEach(({ text, bold }) => {
+    text.split(/\s+/).filter(Boolean).forEach(word => {
+      ctx.font = `${bold ? 700 : 400} ${fontSize}px "${fontFamily}"`;
+      const prefix = line.length ? ' ' : '';
+      const token = prefix + word;
+      const tokenWidth = ctx.measureText(token).width;
+      if (line.length && lineWidth + tokenWidth > maxWidth) {
+        lines.push(line);
+        line = [];
+        lineWidth = 0;
+      }
+      const rendered = line.length ? ' ' + word : word;
+      ctx.font = `${bold ? 700 : 400} ${fontSize}px "${fontFamily}"`;
+      const width = ctx.measureText(rendered).width;
+      line.push({ text: rendered, bold, width });
+      lineWidth += width;
+    });
+  });
+  if (line.length) lines.push(line);
+  return lines;
+}
+
+function drawStyledTextLines(ctx, lines, centerX, y, lineHeight, fontFamily, fontSize) {
+  ctx.save();
+  ctx.textAlign = 'left';
+  lines.forEach(line => {
+    const lineWidth = line.reduce((sum, token) => sum + token.width, 0);
+    let x = centerX - lineWidth / 2;
+    line.forEach(token => {
+      ctx.font = `${token.bold ? 700 : 400} ${fontSize}px "${fontFamily}"`;
+      ctx.fillText(token.text, x, y);
+      x += token.width;
+    });
+    y += lineHeight;
+  });
+  ctx.restore();
+  return y;
 }
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -648,13 +697,16 @@ function draw() {
     y += badgeH + 40;
   }
 
+  const purposeText = state.purpose.trim() || c.defaultPurpose;
   // message
-  const purposeText = (state.purpose.trim() || c.defaultPurpose);
-  const msg = c.messageTemplate(displayName, purposeText);
   ctx.fillStyle = '#2E2116';
-  ctx.font = `400 25px "${bodyFont}"`;
-  const msgLines = wrapText(ctx, msg, W - 220);
-  msgLines.forEach(line => { ctx.fillText(line, W/2, y); y += 36; });
+  const [messageStart, messageEnd] = c.messageParts(displayName);
+  const msgLines = wrapStyledText(ctx, [
+    { text: messageStart, bold: false },
+    { text: purposeText, bold: true },
+    { text: messageEnd, bold: false }
+  ], W - 220, bodyFont, 25);
+  y = drawStyledTextLines(ctx, msgLines, W / 2, y, 36, bodyFont, 25);
 
   // date
   y += 10;
