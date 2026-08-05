@@ -284,13 +284,14 @@
       </div>
 
       <button class="btn-primary" id="downloadBtn">⬇ Download thank-you card</button>
+      <button class="btn-secondary" id="saveCardBtn" type="button">💾 Save Card</button>
       
 
       <div class="history">
         <h2>Recent thank-you cards</h2>
         
         <div class="history-grid" id="historyGrid">
-          <div class="history-empty">No entries yet — tap "Download" to add one.</div>
+          <div class="history-empty">No entries yet — tap "Save Card" to add one.</div>
         </div>
       </div>
     </div>
@@ -743,11 +744,15 @@ purposeEl.addEventListener('input', (e) => {
   draw();
 });
 
-document.getElementById('downloadBtn').addEventListener('click', async () => {
-  if (state.name.trim()) {
-    await logDonorEntry(); // write to donors.csv first, while the click's user-gesture is freshest
+function downloadCard({ logDonor = false } = {}) {
+  if (logDonor && state.name.trim()) {
+    return logDonorEntry().then(() => finishCardDownload());
   }
+  finishCardDownload();
+  return Promise.resolve();
+}
 
+function finishCardDownload() {
   const link = document.createElement('a');
   const safeName = (state.name.trim() || 'donor').replace(/[^a-zA-Z0-9]+/g, '_');
   link.download = `thankyou_${safeName}.png`;
@@ -755,8 +760,21 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
   link.click();
 
   document.getElementById('statusNote').textContent = state.name.trim()
-    ? 'Card downloaded and donor log updated.'
+    ? 'Card downloaded.'
     : 'Card downloaded.';
+}
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  downloadCard({ logDonor: true });
+});
+
+// Save the donor record without generating a PNG download.
+document.getElementById('saveCardBtn').addEventListener('click', async () => {
+  if (!state.name.trim()) {
+    document.getElementById('statusNote').textContent = 'Enter a donor name before saving.';
+    return;
+  }
+  await logDonorEntry();
 });
 
 // ---- Donor log — writes straight into donors.csv, no repeat downloads ----
@@ -1045,10 +1063,33 @@ document.getElementById('allDonorsBtn').addEventListener('click', () => {
   window.location.href = 'donors.html';
 });
 
+// A download requested from the donor register reuses the saved row and
+// deliberately bypasses logDonorEntry(), so no duplicate CSV row is written.
+function loadCardFromQuery() {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has('name')) return false;
+
+  state.nameRaw = params.get('name') || '';
+  state.name = transliterateForLang(state.nameRaw, state.lang);
+  state.amount = (params.get('amount') || '').replace(/[^0-9.]/g, '');
+  state.purpose = params.get('purpose') || COPY[state.lang].defaultPurpose;
+  purposeEl.dataset.userEdited = '1';
+  document.getElementById('donorName').value = state.nameRaw;
+  document.getElementById('donorAmount').value = state.amount;
+  purposeEl.value = state.purpose;
+  return params.get('download') === '1';
+}
+
+const downloadFromDonorRegister = loadCardFromQuery();
+
 // initial font-ready draw
 document.fonts.ready.then(async () => {
 
     draw();
+
+    if (downloadFromDonorRegister) {
+        downloadCard();
+    }
 
     const handle = await ensureFileHandle();
 

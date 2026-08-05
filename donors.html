@@ -139,6 +139,17 @@
     vertical-align: middle;
   }
   tbody tr:hover{ background: rgba(255,255,255,0.03); }
+  .row-download{
+    padding:8px 11px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.16);
+    background:rgba(255,255,255,0.03);
+    color:var(--stone-50);
+    font:600 12px 'Poppins',sans-serif;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .row-download:hover{ border-color:var(--gold); color:var(--gold-light); }
   .empty-state{
     padding: 34px 18px;
     text-align:center;
@@ -263,12 +274,37 @@ function renderTable() {
   emptyPanel.style.display = 'none';
   downloadAllBtn.disabled = false;
 
-  tableHead.innerHTML = headers.map(h => `<th>${h}</th>`).join('');
+  tableHead.innerHTML = headers.map(h => `<th>${h}</th>`).join('') + '<th>Action</th>';
 
   tableBody.innerHTML = '';
   rows.slice().reverse().forEach((row) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = headers.map((_, i) => `<td>${row[i] ?? ''}</td>`).join('');
+    headers.forEach((_, i) => {
+      const td = document.createElement('td');
+      td.textContent = row[i] ?? '';
+      tr.appendChild(td);
+    });
+
+    const actionCell = document.createElement('td');
+    const downloadBtn = document.createElement('button');
+    downloadBtn.type = 'button';
+    downloadBtn.className = 'row-download';
+    downloadBtn.textContent = '⬇ Download';
+    downloadBtn.title = 'Regenerate this thank-you card without adding another donor record';
+    downloadBtn.addEventListener('click', () => {
+      const nameIdx = findColumnIndex(['Donor Name', 'Name']);
+      const amountIdx = findColumnIndex(['Amount (Rs)', 'Amount', 'Donation Amount']);
+      const purposeIdx = findColumnIndex(['Purpose', 'Contribution towards']);
+      const params = new URLSearchParams({
+        name: nameIdx === -1 ? '' : (row[nameIdx] || ''),
+        amount: amountIdx === -1 ? '' : (row[amountIdx] || ''),
+        purpose: purposeIdx === -1 ? '' : (row[purposeIdx] || ''),
+        download: '1'
+      });
+      window.location.href = `index.html?${params.toString()}`;
+    });
+    actionCell.appendChild(downloadBtn);
+    tr.appendChild(actionCell);
     tableBody.appendChild(tr);
   });
 
