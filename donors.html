@@ -45,13 +45,25 @@
   header.app-head h1{ font-size: 20px; font-weight:600; letter-spacing:.2px; color: var(--stone-50); margin:0; }
   header.app-head p{ font-size:12.5px; color:#c9bfae; margin-top:2px; }
   .back-link{
-    display:inline-block;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
     margin-bottom:18px;
     font-size:13px;
-    color:#c9bfae;
+    font-weight:600;
+    color:#e7dfd1;
     text-decoration:none;
+    padding:10px 14px;
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius:10px;
+    background:rgba(255,255,255,0.03);
+    transition:all .15s ease;
   }
-  .back-link:hover{ color: var(--gold-light); }
+  .back-link:hover{
+    color:var(--gold-light);
+    border-color:var(--gold);
+    background:rgba(201,162,39,0.09);
+  }
 
   .panel{
     background: rgba(255,255,255,0.035);
@@ -161,7 +173,7 @@
 <body>
 <div class="wrap">
 
-  <a class="back-link" href="index.html">← Back to card generator</a>
+  <a class="back-link" href="index.html" aria-label="Back to card generator">← <span>Back to card generator</span></a>
 
   <header class="app-head">
     <div class="mark">🙏</div>
