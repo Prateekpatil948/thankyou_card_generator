@@ -32,7 +32,7 @@
     padding: 28px 16px 60px;
   }
   .wrap{
-    max-width: 1180px;
+    max-width: 1440px;
     margin: 0 auto;
   }
   header.app-head{
@@ -62,12 +62,25 @@
 
   .layout{
     display:grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: minmax(290px, 330px) minmax(420px, 1fr) minmax(220px, 260px);
     gap: 22px;
     align-items:start;
   }
-  @media (max-width: 900px){
+  .entry-panel, .history-panel{
+    max-height: calc(100vh - 126px);
+    overflow-y:auto;
+    scrollbar-color: rgba(201,162,39,.6) transparent;
+  }
+  @media (max-width: 1100px){
+    .layout{ grid-template-columns: minmax(290px, 350px) 1fr; }
+    .history-panel{ grid-column: 1 / -1; max-height:none; overflow:visible; }
+    .history-grid{ grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  }
+  @media (max-width: 700px){
     .layout{ grid-template-columns: 1fr; }
+    .entry-panel{ max-height:none; overflow:visible; }
+    .canvas-panel{ height:auto; }
+    #cardCanvas{ width:100%; max-height:none; }
   }
 
   .panel{
@@ -77,7 +90,7 @@
     padding: 20px;
   }
 
-  .field{ margin-bottom:16px; }
+  .field{ margin-bottom:13px; }
   .field label{
     display:block;
     font-size:12px;
@@ -110,7 +123,7 @@
     font-weight:600;
   }
 
-  input[type=text], textarea{
+  input[type=text], input[type=date], textarea{
     width:100%;
     padding:11px 12px;
     border-radius:10px;
@@ -121,7 +134,7 @@
     font-family:'Poppins',sans-serif;
     outline:none;
   }
-  input[type=text]:focus, textarea:focus{
+  input[type=text]:focus, input[type=date]:focus, textarea:focus{
     border-color: var(--gold);
     background: rgba(255,255,255,0.06);
   }
@@ -160,10 +173,15 @@
     flex-direction:column;
     align-items:center;
     gap:16px;
+    height: calc(100vh - 126px);
+    justify-content:center;
   }
   #cardCanvas{
-    width:100%;
+    width:auto;
     max-width: 600px;
+    max-height: calc(100vh - 180px);
+    max-width:100%;
+    height:auto;
     border-radius: 10px;
     box-shadow: 0 25px 70px rgba(0,0,0,0.55);
   }
@@ -173,7 +191,7 @@
   }
 
   .history{
-    margin-top: 28px;
+    margin-top: 0;
   }
   .history-actions{
     margin-bottom: 12px;
@@ -193,7 +211,7 @@
   }
   .history-grid{
     display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: 1fr;
     gap:12px;
   }
   .history-card{
@@ -255,7 +273,7 @@
   </header>
 
   <div class="layout">
-    <div class="panel">
+    <div class="panel entry-panel">
       <div class="field">
         <button class="btn-secondary" id="allDonorsBtn" type="button">📋 All Donors</button>
       </div>
@@ -274,6 +292,11 @@
       </div>
 
       <div class="field">
+        <label for="village">Village</label>
+        <input type="text" id="village" placeholder="e.g. Vaddebail">
+      </div>
+
+      <div class="field">
         <label for="purpose">Contribution towards (editable)</label>
         <textarea id="purpose"></textarea>
       </div>
@@ -283,23 +306,28 @@
         <input type="text" id="donorAmount" inputmode="numeric" placeholder="e.g. 5000">
       </div>
 
+      <div class="field">
+        <label for="donationDate">Date of donation</label>
+        <input type="date" id="donationDate">
+      </div>
+
       <button class="btn-primary" id="downloadBtn">⬇ Download thank-you card</button>
       <button class="btn-secondary" id="saveCardBtn" type="button">💾 Save Card</button>
-      
-
-      <div class="history">
-        <h2>Recent thank-you cards</h2>
-        
-        <div class="history-grid" id="historyGrid">
-          <div class="history-empty">No entries yet — tap "Save Card" to add one.</div>
-        </div>
-      </div>
     </div>
 
     <div class="panel canvas-panel">
       <canvas id="cardCanvas" width="1300" height="1794"></canvas>
       <div class="status-note" id="statusNote">Preview updates as you type.</div>
     </div>
+
+    <aside class="panel history-panel">
+      <div class="history">
+        <h2>Recent thank-you cards</h2>
+        <div class="history-grid" id="historyGrid">
+          <div class="history-empty">No entries yet — tap "Save Card" to add one.</div>
+        </div>
+      </div>
+    </aside>
   </div>
 </div>
 
@@ -310,18 +338,18 @@ const LOGO_PHOTO = "logo.jpg";
 const COPY = {
   en: {
     trustLine: "1008 Parshwanath\nDigambar Puratan Jain Basadi\nVaddebail",
-    invocation: "|| Jai Jinendra ||",
-    title: "WITH GRATITUDE",
+    invocation: "|| Shree Veetaragay Namah ||",
+    title: "THANK YOU",
     subtitle: "Heartfelt gratitude for your generous donation",
     defaultPurpose: "the temple renovation (Jirnodhar)",
     messageParts: (name) => [
-      `${name}, your generous contribution towards `,
-      ` will always be remembered with gratitude by our entire community. May you be blessed with good health, peace and prosperity.`
+      `Dear ${name}, thank you sincerely for your generous contribution towards `,
+      `. Your support strengthens our temple and community. May Lord Parshwanath bless you and your family with good health, peace, and prosperity.`
     ],
     footerAddr: "Vaddebail, Tq. Khanapur, Dist. Belagavi, Karnataka",
     dharma: "|| Ahimsa Paramo Dharmah ||",
     namePrefix: "",
-    dateLabel: "Dated",
+    dateLabel: "Date of Donation ",
     amountLabel: "Donation",
   },
   kn: {
@@ -331,8 +359,8 @@ const COPY = {
     subtitle: "ನಿಮ್ಮ ಉದಾರ ದೇಣಿಗೆಗಾಗಿ ಹೃತ್ಪೂರ್ವಕ ಕೃತಜ್ಞತೆಗಳು",
     defaultPurpose: "ಬಸದಿಯ ಜೀರ್ಣೋದ್ಧಾರ ಕಾರ್ಯ",
     messageParts: (name) => [
-      `${name} ಅವರೇ, `,
-      `ಕ್ಕೆ ನೀವು ನೀಡಿದ ಉದಾರ ದೇಣಿಗೆಯನ್ನು ನಮ್ಮ ಇಡೀ ಸಮುದಾಯ ಕೃತಜ್ಞತೆಯಿಂದ ಸ್ಮರಿಸುತ್ತದೆ. ನಿಮಗೆ ಆರೋಗ್ಯ, ಶಾಂತಿ ಮತ್ತು ಸಮೃದ್ಧಿ ಸಿಗಲಿ.`
+      `ಆದರಣೀಯ ${name} ಅವರೇ, `,
+      `ಕ್ಕಾಗಿ ನೀವು ನೀಡಿದ ಉದಾರ ದೇಣಿಗೆಗೆ ನಮ್ಮ ಹೃತ್ಪೂರ್ವಕ ಧನ್ಯವಾದಗಳು. ನಿಮ್ಮ ಸಹಕಾರವು ನಮ್ಮ ಬಸದಿ ಮತ್ತು ಸಮುದಾಯವನ್ನು ಬಲಪಡಿಸುತ್ತದೆ. ಭಗವಾನ್ ಪಾರ್ಶ್ವನಾಥರು ನಿಮಗೂ ನಿಮ್ಮ ಕುಟುಂಬಕ್ಕೂ ಉತ್ತಮ ಆರೋಗ್ಯ, ಶಾಂತಿ ಮತ್ತು ಸಮೃದ್ಧಿಯನ್ನು ಅನುಗ್ರಹಿಸಲಿ.`
     ],
     footerAddr: "ವಡ್ಡೆಬೈಲ, ತಾ. ಖಾನಾಪುರ, ಜಿ. ಬೆಳಗಾವಿ, ಕರ್ನಾಟಕ",
     dharma: "|| ಅಹಿಂಸಾ ಪರಮೋ ಧರ್ಮಃ ||",
@@ -347,8 +375,8 @@ const COPY = {
     subtitle: "आपल्या उदार देणगीबद्दल मनःपूर्वक कृतज्ञता",
     defaultPurpose: "बसदि जीर्णोद्धार कार्य",
     messageParts: (name) => [
-      `${name} जी, `,
-      `साठी आपण दिलेली उदार देणगी आमचा संपूर्ण समुदाय कृतज्ञतेने स्मरणात ठेवेल. आपणास आरोग्य, शांती व समृद्धी लाभो.`
+      `आदरणीय ${name} जी, `,
+      `साठी आपण दिलेल्या उदार देणगीबद्दल मनःपूर्वक धन्यवाद. आपल्या सहकार्यामुळे आमची बसदी आणि समाज अधिक बळकट होतो. भगवान पार्श्वनाथ आपल्याला व आपल्या कुटुंबाला उत्तम आरोग्य, शांती आणि समृद्धी प्रदान करो.`
     ],
     footerAddr: "वड्डेबैल, ता. खानापूर, जि. बेळगाव, कर्नाटक",
     dharma: "|| अहिंसा परमो धर्मः ||",
@@ -465,9 +493,34 @@ let state = {
   lang: 'en',
   nameRaw: '',
   name: '',
+  village: '',
   purpose: COPY.en.defaultPurpose,
   amount: '',
+  date: localTodayISO(),
 };
+
+function localTodayISO() {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000;
+  return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+}
+
+function formatDate(dateValue, locale, options) {
+  if (!dateValue) return '';
+  // Add a local midday time to an input value so it never shifts by timezone.
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(dateValue)
+    ? new Date(`${dateValue}T12:00:00`)
+    : new Date(dateValue);
+  return Number.isNaN(date.getTime()) ? dateValue : date.toLocaleDateString(locale, options);
+}
+
+function dateToInputValue(dateValue) {
+  if (!dateValue) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) return dateValue;
+  const parsed = new Date(dateValue);
+  if (Number.isNaN(parsed.getTime())) return '';
+  return [parsed.getFullYear(), String(parsed.getMonth() + 1).padStart(2, '0'), String(parsed.getDate()).padStart(2, '0')].join('-');
+}
 
 function formatINR(num) {
   try {
@@ -611,7 +664,7 @@ function draw() {
     ctx.stroke();
   });
 
-  let y = 150;
+  let y = 108;
 
   // invocation
   ctx.textAlign = 'center';
@@ -623,13 +676,13 @@ function draw() {
   ctx.strokeStyle = '#A9791F';
   ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(120, y); ctx.lineTo(W-120, y); ctx.stroke();
-  y += 90;
+  y += 66;
 
   // trust line
   ctx.fillStyle = '#5A0F16';
   ctx.font = `700 34px "${headFont}"`;
   c.trustLine.split('\n').forEach(line => { ctx.fillText(line, W/2, y); y += 42; });
-  y += 24;
+  y += 16;
 
   // THANK YOU title
   ctx.fillStyle = '#7A1218';
@@ -640,7 +693,7 @@ function draw() {
   ctx.fillStyle = '#3A2A17';
   ctx.font = `500 22px "${bodyFont}"`;
   wrapText(ctx, c.subtitle, W - 240).forEach(line => { ctx.fillText(line, W/2, y); y += 28; });
-  y += 34;
+  y += 20;
 
   // decorative emblem circle
   const rad = 92;
@@ -660,14 +713,25 @@ function draw() {
   ctx.fillText('🙏', cx, cy + 6);
   ctx.textBaseline = 'alphabetic';
   ctx.restore();
-  y = cy + rad + 56;
+  y = cy + rad + 38;
 
   // donor name
   const displayName = state.name.trim() || (state.lang === 'en' ? 'Donor Name' : state.lang === 'kn' ? 'ದಾನಿಗಳ ಹೆಸರು' : 'दात्याचे नाव');
   ctx.fillStyle = '#6E1420';
   ctx.font = `800 46px "${headFont}"`;
   ctx.fillText(displayName, W/2, y);
-  y += 20;
+
+  // village, shown under the donor name when it is entered
+  const displayVillage = state.village.trim() && transliterateForLang(state.village.trim(), state.lang);
+  if (displayVillage) {
+    y += 28;
+    ctx.fillStyle = '#5A0F16';
+    ctx.font = `600 20px "${bodyFont}"`;
+    ctx.fillText(displayVillage, W/2, y);
+    y += 22;
+  } else {
+    y += 20;
+  }
 
   // gold divider under name
   ctx.strokeStyle = '#C9A227';
@@ -710,8 +774,7 @@ function draw() {
 
   // date
   y += 10;
-  const today = new Date();
-  const dateStr = today.toLocaleDateString(state.lang === 'en' ? 'en-IN' : state.lang === 'kn' ? 'kn-IN' : 'mr-IN', { day:'numeric', month:'long', year:'numeric' });
+  const dateStr = formatDate(state.date, state.lang === 'en' ? 'en-IN' : state.lang === 'kn' ? 'kn-IN' : 'mr-IN', { day:'numeric', month:'long', year:'numeric' });
   ctx.font = `500 19px "${bodyFont}"`;
   ctx.fillStyle = '#6E1420';
   ctx.fillText(`${c.dateLabel}: ${dateStr}`, W/2, y);
@@ -782,9 +845,22 @@ document.getElementById('donorName').addEventListener('input', (e) => {
   draw();
 });
 
+document.getElementById('village').addEventListener('input', (e) => {
+  state.village = e.target.value;
+  draw();
+});
+
 document.getElementById('donorAmount').addEventListener('input', (e) => {
   state.amount = e.target.value.replace(/[^0-9.]/g, '');
   e.target.value = state.amount;
+  draw();
+});
+
+const donationDateEl = document.getElementById('donationDate');
+const villageEl = document.getElementById('village');
+donationDateEl.value = state.date;
+donationDateEl.addEventListener('input', (e) => {
+  state.date = e.target.value || localTodayISO();
   draw();
 });
 
@@ -874,8 +950,8 @@ function csvEscape(val) {
 }
 
 function buildCSV(list) {
-  const header = ['Donor Name', 'Amount (Rs)', 'Purpose', 'Date of Donation'];
-  const rows = list.map(r => [r.name, r.amount || '', r.purpose || '', r.date]);
+  const header = ['Donor Name', 'Village', 'Amount (Rs)', 'Purpose', 'Date of Donation'];
+  const rows = list.map(r => [r.name, r.village || '', r.amount || '', r.purpose || '', r.date]);
   return [header, ...rows].map(row => row.map(csvEscape).join(',')).join('\r\n');
 }
 
@@ -902,14 +978,22 @@ function parseCSVLine(line) {
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim().length);
   if (lines.length < 2) return [];
+  const header = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
+  const column = (...names) => header.findIndex(h => names.includes(h));
+  const nameIndex = column('donor name', 'name');
+  const villageIndex = column('village');
+  const amountIndex = column('amount (rs)', 'amount', 'donation amount');
+  const purposeIndex = column('purpose', 'contribution towards');
+  const dateIndex = column('date of donation', 'date');
   return lines.slice(1).map(line => {
     const cols = parseCSVLine(line);
     return {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-      name: cols[0] || '',
-      amount: cols[1] || '',
-      purpose: cols[2] || '',
-      date: cols[3] || '',
+      name: cols[nameIndex === -1 ? 0 : nameIndex] || '',
+      village: cols[villageIndex] || '',
+      amount: cols[amountIndex] || '',
+      purpose: cols[purposeIndex] || '',
+      date: cols[dateIndex] || '',
     };
   });
 }
@@ -1014,13 +1098,10 @@ async function logDonorEntry() {
     donorLog.push({
         id: crypto.randomUUID(),
         name: state.name.trim(),
+        village: state.village.trim(),
         amount: state.amount || "",
         purpose: state.purpose || "",
-        date: new Date().toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        })
+        date: formatDate(state.date, "en-IN", { day: "numeric", month: "short", year: "numeric" })
     });
 
     renderHistory();
@@ -1047,8 +1128,8 @@ function renderHistory() {
 
     historyGrid.innerHTML = "";
 
-    // Only latest 6 donors
-    const recentDonors = donorLog.slice(-6).reverse();
+    // Only latest 5 donors
+    const recentDonors = donorLog.slice(-5).reverse();
 
     recentDonors.forEach((rec) => {
 
@@ -1061,6 +1142,7 @@ function renderHistory() {
 
             <div class="hmeta">
                 ${rec.date}
+                ${rec.village ? "<br>" + rec.village : ""}
                 ${rec.amount ? "<br>₹ " + Number(rec.amount).toLocaleString("en-IN") : ""}
             </div>
 
@@ -1074,12 +1156,16 @@ function renderHistory() {
 
             state.nameRaw = rec.name;
             state.name = transliterateForLang(state.nameRaw, state.lang);
+            state.village = rec.village || "";
             state.amount = rec.amount || "";
             state.purpose = rec.purpose || "";
+            state.date = dateToInputValue(rec.date) || localTodayISO();
 
             donorName.value = state.nameRaw;
+            villageEl.value = state.village;
             donorAmount.value = state.amount;
             purpose.value = state.purpose;
+            donationDateEl.value = state.date;
 
             draw();
         });
@@ -1123,11 +1209,15 @@ function loadCardFromQuery() {
 
   state.nameRaw = params.get('name') || '';
   state.name = transliterateForLang(state.nameRaw, state.lang);
+  state.village = params.get('village') || '';
   state.amount = (params.get('amount') || '').replace(/[^0-9.]/g, '');
   state.purpose = params.get('purpose') || COPY[state.lang].defaultPurpose;
+  state.date = params.get('date') || localTodayISO();
   purposeEl.dataset.userEdited = '1';
   document.getElementById('donorName').value = state.nameRaw;
+  document.getElementById('village').value = state.village;
   document.getElementById('donorAmount').value = state.amount;
+  donationDateEl.value = state.date;
   purposeEl.value = state.purpose;
   return params.get('download') === '1';
 }

@@ -266,6 +266,14 @@ function findColumnIndex(namesToTry) {
   return -1;
 }
 
+function dateToInputValue(dateValue) {
+  if (!dateValue) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) return dateValue;
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return '';
+  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
+}
+
 function renderTable() {
   const tableHead = document.getElementById('tableHead');
   const tableBody = document.getElementById('tableBody');
@@ -307,10 +315,14 @@ function renderTable() {
       const nameIdx = findColumnIndex(['Donor Name', 'Name']);
       const amountIdx = findColumnIndex(['Amount (Rs)', 'Amount', 'Donation Amount']);
       const purposeIdx = findColumnIndex(['Purpose', 'Contribution towards']);
+      const villageIdx = findColumnIndex(['Village']);
+      const dateIdx = findColumnIndex(['Date of Donation', 'Date']);
       const params = new URLSearchParams({
         name: nameIdx === -1 ? '' : (row[nameIdx] || ''),
+        village: villageIdx === -1 ? '' : (row[villageIdx] || ''),
         amount: amountIdx === -1 ? '' : (row[amountIdx] || ''),
         purpose: purposeIdx === -1 ? '' : (row[purposeIdx] || ''),
+        date: dateIdx === -1 ? '' : dateToInputValue(row[dateIdx] || ''),
         download: '1'
       });
       window.location.href = `index.html?${params.toString()}`;
