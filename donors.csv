@@ -1,12 +1,33 @@
-Donor Name,Village,Amount (Rs),Purpose,Date of Donation
-Suryaji Patil,Vaddebail,5000,the temple renovation (Jirnodhar),4 Aug 2026
-Basavanth Sutar,Khanapur,11000,the temple renovation (Jirnodhar),4 Aug 2026
-Laxman G Thakar,Kolhapur,21000,the temple renovation (Jirnodhar),4 Aug 2026
-Smt. Hema Kadam,Belagavi,10000,the temple renovation (Jirnodhar),4 Aug 2026
-Pradeep Dariwala, Bangalore,11000,the temple renovation (Jirnodhar),5 Aug 2026
-Shantinath Bogar, B.Kudachi,2000,the temple renovation (Jirnodhar),5 Aug 2026
-Tammanna Desai, Belagavi,10001,the temple renovation (Jirnodhar),5 Aug 2026
-Smt. lalita R Patil, Belagavi,10011,the temple renovation (Jirnodhar),5 Aug 2026
-Neminath Badavannavar, Belagavi,1008,the temple renovation (Jirnodhar),5 Aug 2026
-Paris Shetty, B.Kudachi,5000,the temple renovation (Jirnodhar),5 Aug 2026
-Ananth A Kyatanavar, Tigadolli,11000,the temple renovation (Jirnodhar),6 Aug 2026
+Donor Name,Village,Amount (Rs),Purpose,Date of Donation,Payment Method
+Suryaji Patil,Vaddebail,5000,the temple renovation (Jirnodhar),21 May 2026,Cash
+Ramesh Dabhale,Chapagoun,1100,the temple renovation (Jirnodhar),22 May 2026,Cash
+Nagaraj Yalgurkar,Chapagoun,5100,the temple renovation (Jirnodhar),22 May 2026,UPI
+Balachandra Sir,Chapagoun,2500,the temple renovation (Jirnodhar),30 May 2026,Cash
+Shankar Dabhale,Chapagoun,1000,the temple renovation (Jirnodhar),30 May 2026,Cash
+Piraji Kuradhe,Chapagoun,2100,the temple renovation (Jirnodhar),30 May 2026,Cash
+Kiran Karekar,Chapagoun,1100,the temple renovation (Jirnodhar),30 May 2026,Cash
+Vinayak Badagi,Kolhapur,2000,the temple renovation (Jirnodhar),31 May 2026,Cash
+Jayavanth Mesari,Kolhapur,5000,the temple renovation (Jirnodhar),31 May 2026,Cash
+Malappa,Kolhapur,500,the temple renovation (Jirnodhar),31 May 2026,Cash
+Sunil Tigadolli,Kolhapur,500,the temple renovation (Jirnodhar),31 May 2026,Cash
+Yallappa Mesari,Kolhapur,500,the temple renovation (Jirnodhar),31 May 2026,Cash
+Dasharath Mesari,Kolhapur,1000,the temple renovation (Jirnodhar),31 May 2026,UPI
+Narayan Thakar,Kolhapur,1000,the temple renovation (Jirnodhar),31 May 2026,Cash
+Sunil B Patil,B. Kudachi,11000,the temple renovation (Jirnodhar),31 May 2026,Cash
+Nanda Prasanna Kumar,Belagavi,10100,the temple renovation (Jirnodhar),7 Jun 2026,UPI
+Shobha A Patil,B. Kudachi,2500,the temple renovation (Jirnodhar),7 Jun 2026,Cash
+Sunil Kadabi,Belagavi,1108,the temple renovation (Jirnodhar),7 Jun 2026,Cash
+Subhash Malamasti,Belagavi,2000,the temple renovation (Jirnodhar),7 Jun 2026,Cash
+Madanavali Kolhapur,Kolhapur,5000,the temple renovation (Jirnodhar),7 Jun 2026,Cash
+Laxman G Thakar,Kolhapur,21000,the temple renovation (Jirnodhar),7 Jun 2026,Cash
+Sammed Kolhapure,Belagavi,11000,the temple renovation (Jirnodhar),7 Jun 2026,UPI
+Babaji J Patil,Belagavi,2000,the temple renovation (Jirnodhar),7 Jun 2026,UPI
+Basavanth Sutar,Khanapur,11000,the temple renovation (Jirnodhar),4 Aug 2026,UPI
+Smt. Hema Kadam,Belagavi,10000,the temple renovation (Jirnodhar),4 Aug 2026,UPI
+Pradeep Dariwala, Bangalore,11000,the temple renovation (Jirnodhar),5 Aug 2026,UPI
+Shantinath Bogar, B.Kudachi,2000,the temple renovation (Jirnodhar),5 Aug 2026,UPI
+Tammanna Desai, Belagavi,10001,the temple renovation (Jirnodhar),5 Aug 2026,UPI
+Smt. lalita R Patil, Belagavi,10011,the temple renovation (Jirnodhar),5 Aug 2026,UPI
+Neminath Badavannavar, Belagavi,1008,the temple renovation (Jirnodhar),5 Aug 2026,UPI
+Paris Shetty, B.Kudachi,5000,the temple renovation (Jirnodhar),5 Aug 2026,UPI
+Ananth A Kyatanavar, Tigadolli,11000,the temple renovation (Jirnodhar),6 Aug 2026,UPI

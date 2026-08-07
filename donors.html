@@ -26,34 +26,39 @@
       var(--stone-950);
     color: var(--stone-100);
     min-height:100vh;
-    padding: 28px 16px 60px;
+    padding: 14px 16px 20px;
   }
   .wrap{ max-width: 1180px; margin: 0 auto; }
-  header.app-head{
-    display:flex;
+  .register-head{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
     align-items:center;
-    gap:14px;
-    margin-bottom: 22px;
+    gap:12px;
+    margin-bottom:14px;
   }
-  header.app-head .mark{
-    width:44px;height:44px;border-radius:10px;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    display:flex;align-items:center;justify-content:center;
-    font-size:22px;
-    box-shadow: 0 4px 14px rgba(201,162,39,0.35);
+  .temple-name{
+    margin:0;
+    color:var(--gold-light);
+    background:linear-gradient(90deg, var(--gold-light), #fff1b1, var(--gold));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-size:24px;
+    font-weight:600;
+    text-align:center;
+    white-space:nowrap;
   }
-  header.app-head h1{ font-size: 20px; font-weight:600; letter-spacing:.2px; color: var(--stone-50); margin:0; }
-  header.app-head p{ font-size:12.5px; color:#c9bfae; margin-top:2px; }
   .back-link{
     display:inline-flex;
+    justify-self:start;
     align-items:center;
     gap:8px;
-    margin-bottom:18px;
-    font-size:13px;
+    margin:0;
+    font-size:11px;
     font-weight:600;
     color:#e7dfd1;
     text-decoration:none;
-    padding:10px 14px;
+    padding:6px 10px;
     border:1px solid rgba(255,255,255,0.16);
     border-radius:10px;
     background:rgba(255,255,255,0.03);
@@ -64,13 +69,22 @@
     border-color:var(--gold);
     background:rgba(201,162,39,0.09);
   }
+  .header-logo{
+    justify-self:end;
+    width:104px;
+    height:104px;
+    object-fit:cover;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    box-shadow:0 3px 10px rgba(201,162,39,.28);
+  }
 
   .panel{
     background: rgba(255,255,255,0.035);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 16px;
+    margin-bottom: 14px;
   }
 
   .toolbar{
@@ -80,11 +94,11 @@
     align-items:center;
   }
   .btn-primary, .btn-secondary{
-    padding:11px 16px;
+    padding:9px 13px;
     border-radius:11px;
     border:none;
     font-weight:600;
-    font-size:13.5px;
+    font-size:12.5px;
     cursor:pointer;
     font-family:'Poppins',sans-serif;
   }
@@ -110,15 +124,21 @@
     gap:20px;
     flex-wrap:wrap;
   }
+  .top-panel .summary{ justify-content:center; }
+  .top-panel .toolbar{ margin-left:auto; }
+  @media (max-width: 700px){
+    .register-head{ grid-template-columns:1fr auto; }
+    .temple-name{ grid-column:1 / -1; grid-row:2; white-space:normal; font-size:14px; }
+  }
 
   .summary{
     display:flex;
-    gap:34px;
+    gap:24px;
     flex-wrap:wrap;
-    font-size:15px;
+    font-size:13px;
     color:#c9bfae;
   }
-  .summary b{ color: var(--stone-50); font-size:22px; display:block; }
+  .summary b{ color: var(--stone-50); font-size:19px; display:block; }
 
   .table-wrap{
     overflow-x:auto;
@@ -129,7 +149,7 @@
     width:100%;
     border-collapse: collapse;
     font-size: 13px;
-    min-width: 640px;
+    min-width: 600px;
   }
   thead th{
     text-align:left;
@@ -139,13 +159,13 @@
     font-size:11.5px;
     text-transform:uppercase;
     letter-spacing:.06em;
-    padding: 12px 14px;
+    padding: 10px 12px;
     white-space:nowrap;
     position: sticky;
     top:0;
   }
   tbody td{
-    padding: 11px 14px;
+    padding: 9px 12px;
     border-top: 1px solid rgba(255,255,255,0.06);
     color: var(--stone-100);
     vertical-align: middle;
@@ -168,19 +188,34 @@
     color:#a89c86;
     font-size:13.5px;
   }
+  .pagination{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:12px;
+    font-size:12px;
+    color:#c9bfae;
+  }
+  .pagination button{
+    padding:7px 11px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.16);
+    background:rgba(255,255,255,0.03);
+    color:#e7dfd1;
+    font:600 12px 'Poppins',sans-serif;
+    cursor:pointer;
+  }
+  .pagination button:disabled{ opacity:.4; cursor:not-allowed; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <a class="back-link" href="index.html" aria-label="Back to card generator">← <span>Back to card generator</span></a>
-
-  <header class="app-head">
-    <div class="mark">🙏</div>
-    <div>
-      <h1>All Donors</h1>
-      <p>1008 Parshwanath Digambar Jain Mandir · Vaddebail — donor register</p>
-    </div>
+  <header class="register-head">
+    <a class="back-link" href="index.html" aria-label="Back to card generator">← <span>Back</span></a>
+    <h1 class="temple-name">1008 Parshwanath Digambar Jain Puratan Basadi · Vaddebail</h1>
+    <img class="header-logo" src="logo.jpg" alt="Temple logo">
   </header>
 
   <div class="panel top-panel">
@@ -197,6 +232,7 @@
         <tbody id="tableBody"></tbody>
       </table>
     </div>
+    <div class="pagination" id="pagination" aria-label="Donor list pagination"></div>
   </div>
 
   <div class="panel" id="emptyPanel">
@@ -208,6 +244,8 @@
 <script>
 let headers = [];
 let rows = [];
+let currentPage = 1;
+const ROWS_PER_PAGE = 10;
 
 function csvEscape(val) {
   const s = String(val ?? '');
@@ -296,8 +334,13 @@ function renderTable() {
 
   tableHead.innerHTML = headers.map(h => `<th>${h}</th>`).join('') + '<th>Action</th>';
 
+  const reversedRows = rows.slice().reverse();
+  const totalPages = Math.max(1, Math.ceil(reversedRows.length / ROWS_PER_PAGE));
+  currentPage = Math.min(currentPage, totalPages);
+  const pageRows = reversedRows.slice((currentPage - 1) * ROWS_PER_PAGE, currentPage * ROWS_PER_PAGE);
+
   tableBody.innerHTML = '';
-  rows.slice().reverse().forEach((row) => {
+  pageRows.forEach((row) => {
     const tr = document.createElement('tr');
     headers.forEach((_, i) => {
       const td = document.createElement('td');
@@ -315,12 +358,14 @@ function renderTable() {
       const nameIdx = findColumnIndex(['Donor Name', 'Name']);
       const amountIdx = findColumnIndex(['Amount (Rs)', 'Amount', 'Donation Amount']);
       const purposeIdx = findColumnIndex(['Purpose', 'Contribution towards']);
+      const paymentMethodIdx = findColumnIndex(['Payment Method', 'Payment Mode', 'Donation Method']);
       const villageIdx = findColumnIndex(['Village']);
       const dateIdx = findColumnIndex(['Date of Donation', 'Date']);
       const params = new URLSearchParams({
         name: nameIdx === -1 ? '' : (row[nameIdx] || ''),
         village: villageIdx === -1 ? '' : (row[villageIdx] || ''),
         amount: amountIdx === -1 ? '' : (row[amountIdx] || ''),
+        paymentMethod: paymentMethodIdx === -1 ? '' : (row[paymentMethodIdx] || ''),
         purpose: purposeIdx === -1 ? '' : (row[purposeIdx] || ''),
         date: dateIdx === -1 ? '' : dateToInputValue(row[dateIdx] || ''),
         download: '1'
@@ -334,22 +379,45 @@ function renderTable() {
 
   // Summary line
   const amountIdx = findColumnIndex(['Amount (Rs)', 'Amount', 'Donation Amount']);
+  const paymentMethodIdx = findColumnIndex(['Payment Method', 'Payment Mode', 'Donation Method']);
   let summaryHTML = `<div><b>${rows.length}</b>Total donors</div>`;
   if (amountIdx !== -1) {
-    const total = rows.reduce((sum, r) => {
-      const n = Number(String(r[amountIdx] || '').replace(/[^0-9.\-]/g, ''));
-      return sum + (isFinite(n) ? n : 0);
-    }, 0);
+    const amountFor = (row) => {
+      const n = Number(String(row[amountIdx] || '').replace(/[^0-9.\-]/g, ''));
+      return isFinite(n) ? n : 0;
+    };
+    const total = rows.reduce((sum, r) => sum + amountFor(r), 0);
+    const cashTotal = paymentMethodIdx === -1 ? 0 : rows.reduce((sum, r) =>
+      sum + (/^cash$/i.test((r[paymentMethodIdx] || '').trim()) ? amountFor(r) : 0), 0);
+    const upiTotal = paymentMethodIdx === -1 ? 0 : rows.reduce((sum, r) =>
+      sum + (/^upi$/i.test((r[paymentMethodIdx] || '').trim()) ? amountFor(r) : 0), 0);
     summaryHTML += `<div><b>₹${total.toLocaleString('en-IN')}</b>Total contributions</div>`;
+    summaryHTML += `<div><b>₹${cashTotal.toLocaleString('en-IN')}</b>Via cash</div>`;
+    summaryHTML += `<div><b>₹${upiTotal.toLocaleString('en-IN')}</b>Via UPI</div>`;
   }
   summary.innerHTML = summaryHTML;
   summary.style.display = 'flex';
+
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = `
+    <button type="button" id="prevPageBtn" ${currentPage === 1 ? 'disabled' : ''}>← Previous</button>
+    <span>Page ${currentPage} of ${totalPages}</span>
+    <button type="button" id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>`;
+  document.getElementById('prevPageBtn').addEventListener('click', () => {
+    currentPage--;
+    renderTable();
+  });
+  document.getElementById('nextPageBtn').addEventListener('click', () => {
+    currentPage++;
+    renderTable();
+  });
 }
 
 function loadFromText(text) {
   const parsed = parseCSV(text);
   headers = parsed.headers;
   rows = parsed.rows;
+  currentPage = 1;
   renderTable();
 }
 

@@ -29,7 +29,7 @@
       var(--stone-950);
     color: var(--stone-100);
     min-height:100vh;
-    padding: 28px 16px 60px;
+    padding: 14px 16px 20px;
   }
   .wrap{
     max-width: 1440px;
@@ -39,7 +39,7 @@
     display:flex;
     align-items:center;
     gap:14px;
-    margin-bottom: 26px;
+    margin-bottom: 14px;
   }
   header.app-head .mark{
     width:44px;height:44px;border-radius:10px;
@@ -66,7 +66,7 @@
     gap: 22px;
     align-items:start;
   }
-  .entry-panel, .history-panel{
+  .history-panel{
     max-height: calc(100vh - 126px);
     overflow-y:auto;
     scrollbar-color: rgba(201,162,39,.6) transparent;
@@ -87,17 +87,17 @@
     background: rgba(255,255,255,0.035);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px;
-    padding: 20px;
+    padding: 16px;
   }
 
-  .field{ margin-bottom:13px; }
+  .field{ margin-bottom:9px; }
   .field label{
     display:block;
-    font-size:12px;
+    font-size:10.5px;
     text-transform:uppercase;
     letter-spacing:.08em;
     color:#c9bfae;
-    margin-bottom:7px;
+    margin-bottom:5px;
     font-weight:600;
   }
   .lang-row{
@@ -106,12 +106,12 @@
   }
   .lang-btn{
     flex:1;
-    padding:9px 6px;
+    padding:7px 6px;
     border-radius:9px;
     border:1px solid rgba(255,255,255,0.14);
     background: rgba(255,255,255,0.03);
     color:#e7dfd1;
-    font-size:13px;
+    font-size:12px;
     cursor:pointer;
     transition: all .15s ease;
     font-family:'Poppins',sans-serif;
@@ -125,12 +125,12 @@
 
   input[type=text], input[type=date], textarea{
     width:100%;
-    padding:11px 12px;
+    padding:8px 10px;
     border-radius:10px;
     border:1px solid rgba(255,255,255,0.14);
     background: rgba(255,255,255,0.04);
     color: var(--stone-50);
-    font-size:14.5px;
+    font-size:13px;
     font-family:'Poppins',sans-serif;
     outline:none;
   }
@@ -138,17 +138,25 @@
     border-color: var(--gold);
     background: rgba(255,255,255,0.06);
   }
-  textarea{ resize:vertical; min-height:64px; line-height:1.5;}
+  textarea{ resize:vertical; min-height:52px; line-height:1.4;}
+  .payment-options{ display:flex; gap:10px; }
+  .payment-option{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:7px;
+    padding:8px; border:1px solid rgba(255,255,255,0.14); border-radius:10px;
+    color:var(--stone-50); font-size:12px; cursor:pointer;
+  }
+  .payment-option:has(input:checked){ border-color:var(--gold); background:rgba(201,162,39,.12); }
+  .payment-option input{ accent-color:var(--gold); }
 
   .btn-primary{
     width:100%;
-    padding:13px;
+    padding:10px;
     border-radius:11px;
     border:none;
     background: linear-gradient(135deg, var(--gold-light), var(--gold));
     color:#2b2007;
     font-weight:700;
-    font-size:14.5px;
+    font-size:13px;
     cursor:pointer;
     letter-spacing:.02em;
     font-family:'Poppins',sans-serif;
@@ -156,14 +164,14 @@
   .btn-primary:active{ transform: translateY(1px); }
   .btn-secondary{
     width:100%;
-    margin-top:10px;
-    padding:12px;
+    margin-top:8px;
+    padding:10px;
     border-radius:11px;
     border:1px solid rgba(255,255,255,0.16);
     background: rgba(255,255,255,0.03);
     color:#e7dfd1;
     font-weight:600;
-    font-size:13.5px;
+    font-size:12.5px;
     cursor:pointer;
     font-family:'Poppins',sans-serif;
   }
@@ -268,7 +276,7 @@
     <div class="mark">🙏</div>
     <div>
       <h1>Donor Thank-You Card Generator</h1>
-      <p>1008 Parshwanath Digambar Jain Mandir · Vaddebail — internal committee tool</p>
+      <p>Shree 1008 Parshwanath Digambar Jain Mandir · Vaddebail — internal committee tool</p>
     </div>
   </header>
 
@@ -307,6 +315,14 @@
       </div>
 
       <div class="field">
+        <label>Donation received via</label>
+        <div class="payment-options" role="radiogroup" aria-label="Donation payment method">
+          <label class="payment-option"><input type="radio" name="paymentMethod" value="Cash"> Cash</label>
+          <label class="payment-option"><input type="radio" name="paymentMethod" value="UPI"> UPI</label>
+        </div>
+      </div>
+
+      <div class="field">
         <label for="donationDate">Date of donation</label>
         <input type="date" id="donationDate">
       </div>
@@ -337,7 +353,7 @@ const LOGO_PHOTO = "logo.jpg";
 
 const COPY = {
   en: {
-    trustLine: "1008 Parshwanath\nDigambar Puratan Jain Basadi\nVaddebail",
+    trustLine: "Shree 1008 Parshwanath\nDigambar Puratan Jain Basadi\nVaddebail",
     invocation: "|| Shree Veetaragay Namah ||",
     title: "THANK YOU",
     subtitle: "Heartfelt gratitude for your generous donation",
@@ -353,7 +369,7 @@ const COPY = {
     amountLabel: "Donation",
   },
   kn: {
-    trustLine: "1008 ಪಾರ್ಶ್ವನಾಥ\nದಿಗಂಬರ ಪುರಾತನ ಜೈನ ಬಸದಿ\nವಡ್ಡೆಬೈಲ",
+    trustLine: "ಶ್ರೀ 1008 ಪಾರ್ಶ್ವನಾಥ\nದಿಗಂಬರ ಪುರಾತನ ಜೈನ ಬಸದಿ\nವಡ್ಡೆಬೈಲ",
     invocation: "|| ಶ್ರೀ ವೀತರಾಗಾಯ ನಮಃ ||",
     title: "ಧನ್ಯವಾದಗಳು",
     subtitle: "ನಿಮ್ಮ ಉದಾರ ದೇಣಿಗೆಗಾಗಿ ಹೃತ್ಪೂರ್ವಕ ಕೃತಜ್ಞತೆಗಳು",
@@ -369,7 +385,7 @@ const COPY = {
     amountLabel: "ದೇಣಿಗೆ",
   },
   mr: {
-    trustLine: "1008 पार्श्वनाथ\nदिगंबर पुरातन जैन बसदी\nवड्डेबैल",
+    trustLine: "श्री 1008 पार्श्वनाथ\nदिगंबर पुरातन जैन बसदी\nवड्डेबैल",
     invocation: "|| श्री वीतरागाय नमः ||",
     title: "धन्यवाद",
     subtitle: "आपल्या उदार देणगीबद्दल मनःपूर्वक कृतज्ञता",
@@ -496,6 +512,7 @@ let state = {
   village: '',
   purpose: COPY.en.defaultPurpose,
   amount: '',
+  paymentMethod: '',
   date: localTodayISO(),
 };
 
@@ -856,6 +873,10 @@ document.getElementById('donorAmount').addEventListener('input', (e) => {
   draw();
 });
 
+document.querySelectorAll('input[name="paymentMethod"]').forEach((input) => {
+  input.addEventListener('change', (e) => { state.paymentMethod = e.target.value; });
+});
+
 const donationDateEl = document.getElementById('donationDate');
 const villageEl = document.getElementById('village');
 donationDateEl.value = state.date;
@@ -893,6 +914,10 @@ function finishCardDownload() {
 }
 
 document.getElementById('downloadBtn').addEventListener('click', () => {
+  if (state.name.trim() && !state.paymentMethod) {
+    document.getElementById('statusNote').textContent = 'Choose Cash or UPI before downloading.';
+    return;
+  }
   downloadCard({ logDonor: true });
 });
 
@@ -950,8 +975,8 @@ function csvEscape(val) {
 }
 
 function buildCSV(list) {
-  const header = ['Donor Name', 'Village', 'Amount (Rs)', 'Purpose', 'Date of Donation'];
-  const rows = list.map(r => [r.name, r.village || '', r.amount || '', r.purpose || '', r.date]);
+  const header = ['Donor Name', 'Village', 'Amount (Rs)', 'Purpose', 'Date of Donation', 'Payment Method'];
+  const rows = list.map(r => [r.name, r.village || '', r.amount || '', r.purpose || '', r.date, r.paymentMethod || '']);
   return [header, ...rows].map(row => row.map(csvEscape).join(',')).join('\r\n');
 }
 
@@ -983,6 +1008,7 @@ function parseCSV(text) {
   const nameIndex = column('donor name', 'name');
   const villageIndex = column('village');
   const amountIndex = column('amount (rs)', 'amount', 'donation amount');
+  const paymentMethodIndex = column('payment method', 'payment mode', 'donation method');
   const purposeIndex = column('purpose', 'contribution towards');
   const dateIndex = column('date of donation', 'date');
   return lines.slice(1).map(line => {
@@ -992,6 +1018,7 @@ function parseCSV(text) {
       name: cols[nameIndex === -1 ? 0 : nameIndex] || '',
       village: cols[villageIndex] || '',
       amount: cols[amountIndex] || '',
+      paymentMethod: cols[paymentMethodIndex] || '',
       purpose: cols[purposeIndex] || '',
       date: cols[dateIndex] || '',
     };
@@ -1085,6 +1112,11 @@ async function writeLogFile() {
 
 async function logDonorEntry() {
 
+    if (!state.paymentMethod) {
+        document.getElementById('statusNote').textContent = 'Choose Cash or UPI before saving.';
+        return;
+    }
+
     const handle = await ensureFileHandle();
 
     if (!handle) return;
@@ -1100,6 +1132,7 @@ async function logDonorEntry() {
         name: state.name.trim(),
         village: state.village.trim(),
         amount: state.amount || "",
+        paymentMethod: state.paymentMethod,
         purpose: state.purpose || "",
         date: formatDate(state.date, "en-IN", { day: "numeric", month: "short", year: "numeric" })
     });
@@ -1144,6 +1177,7 @@ function renderHistory() {
                 ${rec.date}
                 ${rec.village ? "<br>" + rec.village : ""}
                 ${rec.amount ? "<br>₹ " + Number(rec.amount).toLocaleString("en-IN") : ""}
+                ${rec.paymentMethod ? " · " + rec.paymentMethod : ""}
             </div>
 
             <button class="hdel">Delete</button>
@@ -1158,12 +1192,16 @@ function renderHistory() {
             state.name = transliterateForLang(state.nameRaw, state.lang);
             state.village = rec.village || "";
             state.amount = rec.amount || "";
+            state.paymentMethod = rec.paymentMethod || "";
             state.purpose = rec.purpose || "";
             state.date = dateToInputValue(rec.date) || localTodayISO();
 
             donorName.value = state.nameRaw;
             villageEl.value = state.village;
             donorAmount.value = state.amount;
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
+                input.checked = input.value === state.paymentMethod;
+            });
             purpose.value = state.purpose;
             donationDateEl.value = state.date;
 
@@ -1211,12 +1249,16 @@ function loadCardFromQuery() {
   state.name = transliterateForLang(state.nameRaw, state.lang);
   state.village = params.get('village') || '';
   state.amount = (params.get('amount') || '').replace(/[^0-9.]/g, '');
+  state.paymentMethod = params.get('paymentMethod') || '';
   state.purpose = params.get('purpose') || COPY[state.lang].defaultPurpose;
   state.date = params.get('date') || localTodayISO();
   purposeEl.dataset.userEdited = '1';
   document.getElementById('donorName').value = state.nameRaw;
   document.getElementById('village').value = state.village;
   document.getElementById('donorAmount').value = state.amount;
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
+    input.checked = input.value === state.paymentMethod;
+  });
   donationDateEl.value = state.date;
   purposeEl.value = state.purpose;
   return params.get('download') === '1';
