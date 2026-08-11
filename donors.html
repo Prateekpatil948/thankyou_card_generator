@@ -207,6 +207,59 @@
     cursor:pointer;
   }
   .pagination button:disabled{ opacity:.4; cursor:not-allowed; }
+
+  @media (max-width: 700px){
+    body{ padding:14px 12px 18px; }
+    .register-head{ margin-bottom:12px; }
+    .header-logo{ width:82px; height:82px; }
+    .back-link{ font-size:12px; padding:8px 12px; }
+    .panel{ padding:12px; border-radius:15px; margin-bottom:12px; }
+    .top-panel{ display:block; }
+    .top-panel .summary{
+      display:grid !important;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:16px 10px;
+      text-align:center;
+    }
+    .summary b{ font-size:18px; }
+    .top-panel .toolbar{ margin:18px 0 0; }
+    .top-panel .toolbar .btn-primary{ width:100%; padding:12px; font-size:13px; }
+
+    /* Present each donor as a readable card instead of a wide, clipped table. */
+    .table-wrap{ overflow:visible; border:0; border-radius:0; }
+    table, tbody, tr, td{ display:block; width:100%; }
+    table{ min-width:0; }
+    thead{ display:none; }
+    tbody{ display:grid; gap:10px; }
+    tbody tr{
+      padding:5px 12px;
+      border:1px solid rgba(255,255,255,0.09);
+      border-radius:12px;
+      background:rgba(255,255,255,0.025);
+    }
+    tbody td{
+      display:grid;
+      grid-template-columns:minmax(105px, 40%) 1fr;
+      gap:10px;
+      padding:8px 0;
+      border-top:1px solid rgba(255,255,255,0.06);
+      overflow-wrap:anywhere;
+    }
+    tbody td:first-child{ border-top:0; }
+    tbody td::before{
+      content:attr(data-label);
+      color:var(--gold-light);
+      font-size:10px;
+      font-weight:600;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+    tbody td:last-child{ display:block; padding-top:11px; }
+    tbody td:last-child::before{ display:none; }
+    .row-download{ width:100%; padding:10px; }
+    .pagination{ justify-content:center; gap:7px; flex-wrap:wrap; text-align:center; }
+    .pagination button{ padding:8px 10px; }
+  }
 </style>
 </head>
 <body>
@@ -342,13 +395,15 @@ function renderTable() {
   tableBody.innerHTML = '';
   pageRows.forEach((row) => {
     const tr = document.createElement('tr');
-    headers.forEach((_, i) => {
+    headers.forEach((header, i) => {
       const td = document.createElement('td');
+      td.dataset.label = header;
       td.textContent = row[i] ?? '';
       tr.appendChild(td);
     });
 
     const actionCell = document.createElement('td');
+    actionCell.dataset.label = 'Action';
     const downloadBtn = document.createElement('button');
     downloadBtn.type = 'button';
     downloadBtn.className = 'row-download';
