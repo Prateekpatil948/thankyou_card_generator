@@ -1,4 +1,4 @@
-Donor Name,Village,Amount (Rs),Purpose,Date of Donation,Payment Method
+Donor Name,Village,Donation Amount,Donation for,Donation Date,Payment Method
 Suryaji Patil,Vaddebail,5000,the temple renovation (Jirnodhar),21 May 2026,Cash
 Ramesh Dabhale,Chapagoun,1100,the temple renovation (Jirnodhar),22 May 2026,Cash
 Nagaraj Yalgurkar,Chapagoun,5100,the temple renovation (Jirnodhar),22 May 2026,UPI
@@ -36,3 +36,4 @@ Kallappa Y Bogar,Belagavi,1008,the temple renovation (Jirnodhar),9 Aug 2026,UPI
 Brahmi Sudarshan Sangolli,Garag,5008,the temple renovation (Jirnodhar),10 Aug 2026,Cash
 Sarojini M Kadabi,Vaddebail,5000,the temple renovation (Jirnodhar),11 Aug 2026,Cash
 Shri Neminath Murthi Pujak Sangh,Khanapur,41000,the temple renovation (Jirnodhar),11 Aug 2026,Cash
+Parashuram B Nilajkar,Chapagoun,5000,the temple renovation (Jirnodhar),11 Aug 2026,Cash
